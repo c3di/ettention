@@ -1,0 +1,13 @@
+#ifndef CONVERGENT_BEAMS_PARAMETER_CL
+#define CONVERGENT_BEAMS_PARAMETER_CL
+
+typedef struct
+{
+	float tiltAngle;
+	float openingHalfAngle;
+	float openingHalfAngleTangens;
+	float focalDistance;
+	float focalDifferenceBetweenImages;
+} ConvergentBeamsParameter;
+
+#endif

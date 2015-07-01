@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<input>
+	<projections value="..\jason_64_SART\jason64.ali"/>
+</input>
+
+<output>
+	<filename value="..\..\work\jason64\nonexistent.mrc"/>
+</output>
+
+<debug>
+	<writeResiduals value="true" />
+	<writeProjections value="false" />
+</debug>

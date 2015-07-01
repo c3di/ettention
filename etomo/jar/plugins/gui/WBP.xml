@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+	<parameter>
+
+	<wbpPlugin caption="WBP" id="wbp">
+		<filterType caption="Filter" type="string" required="false" default="ram-lak">
+			<helptext>Type of the filter. The possible values are ram-lak filter (default) or none (for simple back projection).</helptext>
+		</filterType>
+		<filterSize caption="Filter size" type="string" required="false">
+			<helptext>The size of the filter. Typically, the filter width should correspond to the width of the input projections and the rest should be 1 (i.e. 300,1,1 for input projections of size 300 x Y). </helptext>
+		</filterSize>
+		<filterInFourierSpace caption="Use filtering in Fourier space" type="boolean" required="false">
+			<helptext>Use for filtering in Fourier space.</helptext>
+		</filterInFourierSpace>	
+	</wbpPlugin>
+
+</parameter>

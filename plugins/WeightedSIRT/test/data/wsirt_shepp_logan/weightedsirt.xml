@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+</hardware>
+
+<basisFunctions type="string" value="voxels" />
+
+<algorithm value="weightedsirt">
+	<numberOfIterations value="1" />
+	<useLongObjectCompensation value="false"/>
+	<lambda value="1.0" />
+</algorithm>
+
+<input>
+	<projections value="empiar_10009_128.mrc"/>
+	<tiltAngles value="empiar_10009_128.tlt" />
+</input>
+
+<output>
+	<filename value="../../work/wsirt_shepp_logan/empiar.mrc"/>
+	<volumeFormat value="mrc"/>
+    <options>
+        <voxelType value="float32"/>
+        <orientation value="xyz_order" />
+    </options>
+</output>
+
+<volume>
+	<dimension value="128 128 20"/>
+    <initValue value="0.0" />
+</volume>
+
+<debug>
+	<profilingLevel value="detail"/> 
+	<writeProjections value="false" />
+	<writeResiduals value="false" />
+	<writeRayLength value="false" />
+	<writeVirtualProjections value="false" />
+	<writeIntermediateVolumes value="false" />
+	<logProgressInfo value="false" />
+	<outputKernelParameters value="false" />
+</debug>
+
+<forwardProjection>
+	<samples value="1" />
+</forwardProjection>
+
+<backProjection>
+	<samples value="1" />
+</backProjection>

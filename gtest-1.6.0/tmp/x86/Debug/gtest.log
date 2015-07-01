@@ -1,0 +1,9 @@
+﻿Build started 6. 1. 2014 16:32:39.
+     1>Project "C:\Users\odin\Documents\workdir\tom\ettention\experimental\gtest-1.6.0\msvc\gtest.vcxproj" on node 4 (Build target(s)).
+     1>Lib:
+         gtest.vcxproj -> C:\Users\odin\Documents\workdir\tom\ettention\experimental\gtest-1.6.0\msvc\..\lib\x86\Debug\gtestD.lib
+     1>Done Building Project "C:\Users\odin\Documents\workdir\tom\ettention\experimental\gtest-1.6.0\msvc\gtest.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.13

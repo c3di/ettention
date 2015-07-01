@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+    <subVolumeCount value="4" />
+</hardware>
+
+<algorithm value="sart" >
+	<numberOfIterations value="2" />
+	<useLongObjectCompensation value="false"/>
+	<lambda value="0.1" />
+</algorithm>
+
+<input>
+	<projections value="."/>
+</input>
+
+<output>
+	<filename value="..\..\work\synthetic\generated_sart.mrc"/>
+    <options>
+        <voxelType value="float32" />
+    </options>
+</output>
+
+<volume>
+	<dimension value="64 64 64"/>
+    <initValue value="0.0" />
+</volume>
+
+<skipProjections type="string" value="none" />
+
+<debug>
+	<writeProjections value="false"/>
+	<writeVirtualProjections value="false"/>
+	<writeResiduals value="false"/>
+	<writeIntermediateVolumes value="false"/>
+	<displayProjectionRMS value="false"/>
+	<IMODCompliantLogging value="false"/>
+</debug>
+
+<backProjection>
+	<samples value="9" />
+</backProjection>
+
+<forwardProjection>
+	<samples value="4" />
+</forwardProjection>

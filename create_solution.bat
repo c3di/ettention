@@ -1,0 +1,24 @@
+@ECHO OFF
+CLS
+
+CALL .\buildTools\ask_for_environment.bat
+CALL .\get_dependencies.bat
+
+IF [%1]==[] SET BUILD_DIR=build
+IF NOT [%1]==[] SET BUILD_DIR=%1
+IF EXIST .\%BUILD_DIR%\ RMDIR /S /Q .\%BUILD_DIR%\
+ECHO Solution will be placed in %BUILD_DIR%.
+MKDIR %BUILD_DIR%
+CD %BUILD_DIR%
+
+ECHO ---
+
+IF %ETTENTION_PLATFORM%==msvc12_x86 SET "ETTENTION_GENERATOR=Visual Studio 12"
+IF %ETTENTION_PLATFORM%==msvc12_x64 SET "ETTENTION_GENERATOR=Visual Studio 12 Win64"
+
+ECHO Building solution...
+cmake -G "%ETTENTION_GENERATOR%" ..
+CD ..
+
+SET ETTENTION_GENERATOR=
+SET ETTENTION_PLATFORM=

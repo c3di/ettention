@@ -1,0 +1,16 @@
+#ifndef HALF_FLOAT_SUPPORT_CL
+#define HALF_FLOAT_SUPPORT_CL
+
+#ifdef HALF_FLOAT_16 
+    #define FLOAT_TYPE                      __global half*
+    #define READ_FLOAT(data,index)          vload_half(index, data)
+    #define STORE_FLOAT(data,index,value)   vstore_half(value, index, data)
+#endif 
+
+#ifdef FLOAT_32 
+    #define FLOAT_TYPE                      __global float*
+    #define READ_FLOAT(data,index)          data[index]
+    #define STORE_FLOAT(data,index,value)   data[index] = value
+#endif
+
+#endif

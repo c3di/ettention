@@ -1,0 +1,21 @@
+REM @ECHO off
+REM SETLOCAL
+REM SET ETTENTION_PLATFORM=
+
+IF DEFINED ETTENTION_PLATFORM (
+	GOTO END
+)
+
+ECHO --- Visual Studio solution selector for ettention ---
+
+ECHO Choose your platform model
+CHOICE /M "(1) 32 bit, (2) 64 bit, Your choice: " /C 12 /N
+IF ERRORLEVEL 1 SET ERRLVL=1
+IF ERRORLEVEL 2 SET ERRLVL=2
+IF %ERRLVL%==1 SET ETTENTION_PLATFORM=msvc12_x86
+IF %ERRLVL%==2 SET ETTENTION_PLATFORM=msvc12_x64
+
+ECHO ---
+
+:END
+ECHO Your chosen platform is "%ETTENTION_PLATFORM%".

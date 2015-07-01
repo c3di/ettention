@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+	<parameter>
+
+	<stemPlugin caption="STEM" id="tf_art">
+		<beamOpeningHalfAngle caption="Beam Opening Half Angle (mrad)" type="float" required="false" default="0.0042">
+			<helptext>This parameter specifies the opening half angle of the STEM beam in millirad.</helptext>
+		</beamOpeningHalfAngle>
+		<useAutomaticFocusComputation caption="Automatic Focus Computation" type="boolean" required="false" default="true">
+			<helptext>If checked, the system will automatically compute the focal distance for a combined tilt- and focal series.</helptext>
+		</useAutomaticFocusComputation>
+	</stemPlugin>
+
+</parameter>

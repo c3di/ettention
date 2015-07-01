@@ -1,0 +1,349 @@
+<<<<<<< HEAD
+#include "stdafx.h"
+#include "setup/ParameterSet/IOParameterSet.h"
+#include "setup/CommandLineToolParameterSource.h"
+#include "setup/parametersource/CascadingParameterSource.h"
+#include "setup/parametersource/XMLParameterSource.h"
+#include "framework/FileAlgorithms.h"
+#include "framework/Logger.h"
+
+using namespace ettention;
+
+class ParameterSourceTest : public ettention::TestBase  {
+public:
+
+    ParameterSourceTest() 
+    {	
+        commandLineParameterSource = createCommandLineParameterSource_Lambda_NumberOfIterations();
+        cascadingParameterSource = std::shared_ptr<ettention::CascadingParameterSource>( new ettention::CascadingParameterSource() );
+        cascadingParameterSource->addBackendSourceToFront( commandLineParameterSource );
+        cascadingParameterSource->parse();
+    }
+
+    virtual ~ParameterSourceTest() 
+    {        
+    }
+
+    static void addTwoParameters( std::vector<std::string>& parameter ) 
+    {
+        parameter.push_back("test.exe");
+        parameter.push_back("-Lambda");
+        parameter.push_back("1.2");
+        parameter.push_back("-NumberOfIterations");
+        parameter.push_back("4");
+    }
+
+    static std::shared_ptr<ettention::CommandLineToolParameterSource> createCommandLineParameterSourceFromParameterVector(std::vector<std::string>& parameter)
+    {
+        std::shared_ptr<ettention::CommandLineToolParameterSource> parameterSource = std::make_shared<ettention::CommandLineToolParameterSource>(parameter);
+        parameterSource->parse();
+        // delete(argv);
+        return parameterSource;
+    }
+
+    static std::shared_ptr<ettention::CommandLineToolParameterSource> createCommandLineParameterSource_Lambda_NumberOfIterations()
+    {
+        std::vector<std::string> parameter;
+        addTwoParameters( parameter );
+        return createCommandLineParameterSourceFromParameterVector( parameter );
+    }
+
+    std::shared_ptr<ettention::CommandLineToolParameterSource> commandLineParameterSource;
+    std::shared_ptr<ettention::CascadingParameterSource> cascadingParameterSource;
+};
+
+// 
+// Command Line Parameter Source
+//
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersExistPositive) 
+{
+    ASSERT_TRUE( commandLineParameterSource->parameterExists("lambda") );
+}
+
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersExistNegative) 
+{
+    ASSERT_FALSE( commandLineParameterSource->parameterExists("any") );
+    ASSERT_FALSE( commandLineParameterSource->parameterExists("test.exe") );
+    ASSERT_FALSE( commandLineParameterSource->parameterExists("SubareaSize") );	
+}
+
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersValueFloat) 
+{
+    ASSERT_FLOAT_EQ( commandLineParameterSource->getFloatParameter("lambda"), 1.2f  );
+}
+
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersValueUInt) 
+{
+    ASSERT_EQ( commandLineParameterSource->getUIntParameter("numberOfIterations"), 4  );
+}
+
+// 
+// Cascading Parameter Source
+//
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersExistPositive) 
+{
+    ASSERT_TRUE( cascadingParameterSource->parameterExists("lambda") );
+}
+
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersExistNegative) 
+{
+    ASSERT_FALSE( cascadingParameterSource->parameterExists("any") );
+    ASSERT_FALSE( cascadingParameterSource->parameterExists("test.exe") );
+    ASSERT_FALSE( cascadingParameterSource->parameterExists("SubareaSize") );	
+}
+
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersValueFloat) 
+{
+    ASSERT_FLOAT_EQ( cascadingParameterSource->getFloatParameter("lambda"), 1.2f  );
+}
+
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersValueUInt) 
+{
+    ASSERT_EQ( cascadingParameterSource->getUIntParameter("numberOfIterations"), 4  );
+}
+
+TEST_F(ParameterSourceTest, XML_Relative_Path)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("input.projections");
+    auto expectedFilename = boost::filesystem::path(std::string(TESTDATA_DIR) + "/data/jason_64_SART/jason64.ali");
+    ASSERT_TRUE(boost::filesystem::equivalent(inputStackFilename, expectedFilename) );
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Relative_Path_Existing_File)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("input.projections");
+    auto expectedFilename = boost::filesystem::path(std::string(TESTDATA_DIR) + "/data/jason_64_SART/jason64.ali");
+    ASSERT_TRUE(boost::filesystem::equivalent(inputStackFilename, expectedFilename));
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Relative_Path_Nonexisting_File)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("output.volume");
+    auto expectedFilename = ettention::FileAlgorithms::normalizePath( boost::filesystem::path(std::string(TESTDATA_DIR) + "/work/jason64/nonexistent.mrc") );
+    
+    ASSERT_EQ(inputStackFilename, expectedFilename);
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Rootlevel_Node_Access )
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("output.volume");
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Level1_Node_Access)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    bool writeResiduals = source->getBoolParameter("debug.writeResiduals");
+    ASSERT_TRUE(writeResiduals);
+
+    bool writeProjections = source->getBoolParameter("debug.writeProjections");
+    ASSERT_FALSE(writeProjections);
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Level1_Node_Access_NonExistent)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    ASSERT_THROW(source->getBoolParameter("nonExistentParameter"), ettention::Exception);
+    ASSERT_THROW(source->getBoolParameter("debug.nonExistentParameter"), ettention::Exception);
+    ASSERT_THROW(source->getBoolParameter("writeProjections"), ettention::Exception);
+    ASSERT_THROW(source->getBoolParameter("writeResiduals"), ettention::Exception);
+
+    delete(source);
+}
+
+
+
+=======
+#include "stdafx.h"
+#include "setup/ParameterSet/IOParameterSet.h"
+#include "setup/CommandLineToolParameterSource.h"
+#include "setup/parametersource/CascadingParameterSource.h"
+#include "setup/parametersource/XMLParameterSource.h"
+#include "framework/FileAlgorithms.h"
+#include "framework/Logger.h"
+
+using namespace ettention;
+
+class ParameterSourceTest : public ettention::TestBase  {
+public:
+
+    ParameterSourceTest() 
+    {	
+        commandLineParameterSource = createCommandLineParameterSource_Lambda_NumberOfIterations();
+        cascadingParameterSource = std::shared_ptr<ettention::CascadingParameterSource>( new ettention::CascadingParameterSource() );
+        cascadingParameterSource->addBackendSourceToFront( commandLineParameterSource );
+        cascadingParameterSource->parse();
+    }
+
+    virtual ~ParameterSourceTest() 
+    {        
+    }
+
+    static void addTwoParameters( std::vector<std::string>& parameter ) 
+    {
+        parameter.push_back("test.exe");
+        parameter.push_back("-Lambda");
+        parameter.push_back("1.2");
+        parameter.push_back("-NumberOfIterations");
+        parameter.push_back("4");
+    }
+
+    static std::shared_ptr<ettention::CommandLineToolParameterSource> createCommandLineParameterSourceFromParameterVector(std::vector<std::string>& parameter)
+    {
+        std::shared_ptr<ettention::CommandLineToolParameterSource> parameterSource = std::make_shared<ettention::CommandLineToolParameterSource>(parameter);
+        parameterSource->parse();
+        // delete(argv);
+        return parameterSource;
+    }
+
+    static std::shared_ptr<ettention::CommandLineToolParameterSource> createCommandLineParameterSource_Lambda_NumberOfIterations()
+    {
+        std::vector<std::string> parameter;
+        addTwoParameters( parameter );
+        return createCommandLineParameterSourceFromParameterVector( parameter );
+    }
+
+    std::shared_ptr<ettention::CommandLineToolParameterSource> commandLineParameterSource;
+    std::shared_ptr<ettention::CascadingParameterSource> cascadingParameterSource;
+};
+
+// 
+// Command Line Parameter Source
+//
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersExistPositive) 
+{
+    ASSERT_TRUE( commandLineParameterSource->parameterExists("lambda") );
+}
+
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersExistNegative) 
+{
+    ASSERT_FALSE( commandLineParameterSource->parameterExists("any") );
+    ASSERT_FALSE( commandLineParameterSource->parameterExists("test.exe") );
+    ASSERT_FALSE( commandLineParameterSource->parameterExists("SubareaSize") );	
+}
+
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersValueFloat) 
+{
+    ASSERT_FLOAT_EQ( commandLineParameterSource->getFloatParameter("lambda"), 1.2f  );
+}
+
+TEST_F(ParameterSourceTest, Unit_CommandLine_ParametersValueUInt) 
+{
+    ASSERT_EQ( commandLineParameterSource->getUIntParameter("numberOfIterations"), 4  );
+}
+
+// 
+// Cascading Parameter Source
+//
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersExistPositive) 
+{
+    ASSERT_TRUE( cascadingParameterSource->parameterExists("lambda") );
+}
+
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersExistNegative) 
+{
+    ASSERT_FALSE( cascadingParameterSource->parameterExists("any") );
+    ASSERT_FALSE( cascadingParameterSource->parameterExists("test.exe") );
+    ASSERT_FALSE( cascadingParameterSource->parameterExists("SubareaSize") );	
+}
+
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersValueFloat) 
+{
+    ASSERT_FLOAT_EQ( cascadingParameterSource->getFloatParameter("lambda"), 1.2f  );
+}
+
+TEST_F(ParameterSourceTest, Unit_Cascading_ParametersValueUInt) 
+{
+    ASSERT_EQ( cascadingParameterSource->getUIntParameter("numberOfIterations"), 4  );
+}
+
+TEST_F(ParameterSourceTest, XML_Relative_Path)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("input.projections");
+    auto expectedFilename = boost::filesystem::path(std::string(TESTDATA_DIR) + "/data/jason_64_SART/jason64.ali");
+    ASSERT_TRUE(boost::filesystem::equivalent(inputStackFilename, expectedFilename) );
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Relative_Path_Existing_File)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("input.projections");
+    auto expectedFilename = boost::filesystem::path(std::string(TESTDATA_DIR) + "/data/jason_64_SART/jason64.ali");
+    ASSERT_TRUE(boost::filesystem::equivalent(inputStackFilename, expectedFilename));
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Relative_Path_Nonexisting_File)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("output.volume");
+    auto expectedFilename = ettention::FileAlgorithms::normalizePath( boost::filesystem::path(std::string(TESTDATA_DIR) + "/work/jason64/nonexistent.mrc") );
+    
+    ASSERT_EQ(inputStackFilename, expectedFilename);
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Rootlevel_Node_Access )
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    auto inputStackFilename = source->getPathParameter("output.volume");
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Level1_Node_Access)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    bool writeResiduals = source->getBoolParameter("debug.writeResiduals");
+    ASSERT_TRUE(writeResiduals);
+
+    bool writeProjections = source->getBoolParameter("debug.writeProjections");
+    ASSERT_FALSE(writeProjections);
+
+    delete(source);
+}
+
+TEST_F(ParameterSourceTest, XML_Level1_Node_Access_NonExistent)
+{
+    ettention::XMLParameterSource* source = new ettention::XMLParameterSource(std::string(TESTDATA_DIR) + "/data/setup/config.xml");
+
+    ASSERT_THROW(source->getBoolParameter("nonExistentParameter"), ettention::Exception);
+    ASSERT_THROW(source->getBoolParameter("debug.nonExistentParameter"), ettention::Exception);
+    ASSERT_THROW(source->getBoolParameter("writeProjections"), ettention::Exception);
+    ASSERT_THROW(source->getBoolParameter("writeResiduals"), ettention::Exception);
+
+    delete(source);
+}
+
+
+
+>>>>>>> 95a8a0626427ecaaa9ac10cab8556df52cc91119

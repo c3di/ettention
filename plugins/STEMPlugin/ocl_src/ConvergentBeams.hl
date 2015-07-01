@@ -1,0 +1,69 @@
+#ifndef CONVERGENT_BEAMS_CL
+#define CONVERGENT_BEAMS_CL
+
+#include "ConvergentBeamsParameter.hl"
+
+float4 getBeamSource(float4 projectionSource, unsigned int x, unsigned int y, float4 horizontalPitch, float4 verticalPitch)
+{
+    const float fx = ((float) x) + 0.5f;
+    const float fy = ((float) y) + 0.5f;
+
+    const float4 relativePositionU = horizontalPitch * fx;
+    const float4 relativePositionV = verticalPitch * fy;
+
+    return projectionSource + relativePositionU + relativePositionV;
+}
+
+bool isPointInsideUnitCircle(float2 p) 
+{
+    if (p.x*p.x + p.y*p.y > 1.0f)
+        return false;
+    return true;
+}
+
+bool shouldRejectSample(float y, float z) 
+{
+    return ! isPointInsideUnitCircle((float2) (y,z)); 
+}
+
+float4 getRaySourcePosition(int x, int y, int nSamples, float4 beamSource, float4 horizontalPitch, float4 verticalPitch, int sampleIndexX, int sampleIndexY, __global float* random, float focalDistance, float openingHalfAngleTangens, bool* sampleWasRejected)
+{
+    float spreadLength = focalDistance * openingHalfAngleTangens;
+    const int sampleIndex = sampleIndexY * nSamples + sampleIndexX;
+
+    const float unjitteredPositionY = ((float) sampleIndexX / (float) nSamples) * 2.0f - 1.0f;
+    const float jitteredPositionY = unjitteredPositionY + (random[2*sampleIndex] / (float) nSamples);
+
+    const float unjitteredPositionZ = ((float) sampleIndexY / (float) nSamples) * 2.0f - 1.0f;
+    const float jitteredPositionZ = unjitteredPositionZ + (random[2*sampleIndex+1] / (float) nSamples);
+
+    if (shouldRejectSample(jitteredPositionY, jitteredPositionZ)) 
+    {
+        *sampleWasRejected = true;
+        return (float4) (0.0f, 0.0f, 0.0f, 0.0f);
+    }
+    *sampleWasRejected = false;
+
+    const float4 beamSpreadVectorY = normalize(horizontalPitch) * jitteredPositionY * spreadLength;
+    const float4 beamSpreadVectorZ = normalize(verticalPitch) * jitteredPositionZ * spreadLength;
+
+    return beamSource + beamSpreadVectorY + beamSpreadVectorZ;
+}
+
+float4 getRayDirection(int x, int y, 
+                        float4 raySource, 
+                        float4 beamSource, 
+                        float4 normalizedBeamDirection, 
+                        float  focalDistance) 
+{
+    const float4 focalPoint = beamSource + normalizedBeamDirection * focalDistance;
+    const float4 rayDirection = focalPoint - raySource;
+    return normalize(rayDirection);
+}
+
+float getSourceDistanceFromTiltAxisPlane(float4 beamSource, float4 normalizedBeamDirection)
+{
+    return dot(-beamSource.xyz, normalizedBeamDirection.xyz);
+}
+
+#endif

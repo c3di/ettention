@@ -1,0 +1,9 @@
+/build/*.*
+build/*
+build_*/*
+*.user
+.idea
+package/*
+Ettention.7z
+EttentionWithTests.7z
+EttentionSrc.7z
