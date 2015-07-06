@@ -9,6 +9,8 @@
 
 #ifdef WIN32
 #include <windows.h>
+#else
+#include <dlfcn.h>
 #endif
 
 namespace ettention
@@ -45,9 +47,14 @@ namespace ettention
                 continue;
 
             std::string filename = fileIterator->path().filename().string();
+
+#ifdef WIN32
             if(filename.find("Plugin.dll") == std::string::npos)
                 continue;
-
+#else
+            if (filename.find("Plugin.so") == std::string::npos)
+                continue;
+#endif
             loadPlugin(fileIterator->path());
         }
     }
@@ -57,18 +64,31 @@ namespace ettention
 #ifdef WIN32
         HINSTANCE hinstacePlugin = LoadLibrary(pathToPlugin.string().c_str());
 
-        if(hinstacePlugin == NULL)
+        if (hinstacePlugin == NULL)
             return;
 
         typedef Plugin* (FAR *EntryFunction)();
         EntryFunction entryFunction = (EntryFunction)GetProcAddress(hinstacePlugin, "initializePlugin");
 
-        if(entryFunction == NULL)
+        if (entryFunction == NULL)
         {
             FreeLibrary(hinstacePlugin);
             return;
         }
+#else
+        void* libHandle = dlopen( pathToPlugin.string().c_str(), RTLD_LAZY );
+        if (!libHandle) 
+            return;
 
+	    typedef Plugin* ( *EntryFunction )();
+
+        EntryFunction entryFunction = (EntryFunction) dlsym(libHandle, "initializePlugin");
+        if (dlerror() != NULL )
+        {
+            dlclose(libHandle);
+            return;
+        }
+#endif
         Plugin* plugin = (*entryFunction)();
         plugin->setFramework(framework);
 
@@ -78,9 +98,6 @@ namespace ettention
 
         registerPlugin(plugin);
         autoLoadedPlugins.push_back(plugin);
-#else
-        throw Exception("plugin loading not implemented on that platform");
-#endif
     }
 
     ReconstructionAlgorithm* PluginManager::instantiateReconstructionAlgorithm(const std::string& identifier, Framework* framework)
