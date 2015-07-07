@@ -48,4 +48,11 @@ namespace ettention
     {
         return NULL;
     }
+
+    std::vector<ParameterSource*> Plugin::instantiateParameterSource()
+    {
+        std::vector<ParameterSource*> parameterSources;
+        return parameterSources;
+    }
+
 }

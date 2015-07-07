@@ -6,13 +6,15 @@ namespace ettention
 {
     namespace etomo 
     {
-        class PLUGIN_API EtomoPlugin : public Plugin
+        class PLUGIN_API EtomoPlugin : public ettention::Plugin
         {
         public:
             EtomoPlugin();
-            ~EtomoPlugin();
 
-            std::string getName() override;
+            virtual ~EtomoPlugin();
+
+            virtual std::string getName() override;
+            virtual std::vector<ParameterSource*> instantiateParameterSource();
         };
     }
 }

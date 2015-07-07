@@ -30,6 +30,7 @@ namespace ettention
         virtual void registerVolumeFileFormat(VolumeSerializer* factory);
 
         virtual ProjectionSet* instantiateProjectionIterator(const std::string& identifier, ImageStackDatasource* source);
+        virtual std::vector<ParameterSource*> instantiateParameterSource();
 
         virtual void registerForwardProjectionCreator(ForwardProjectionFactory* factory);
         virtual void registerBackProjectionCreator(BackProjectionFactory* factory);

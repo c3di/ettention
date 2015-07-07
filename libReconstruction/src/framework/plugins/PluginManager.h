@@ -19,6 +19,7 @@ namespace ettention
         ~PluginManager();
 
         ReconstructionAlgorithm* instantiateReconstructionAlgorithm(const std::string& identifier, Framework* framework);
+        std::vector<ParameterSource*> instantiateParameterSource();
         ForwardProjectionOperator* instantiateForwardProjectionOperator(ImageStackDatasource* source, Framework* framework);
         ProjectionSet* instantiateProjectionIterator(const std::string& identifier, ImageStackDatasource* source);
         void registerPlugin(Plugin* plugin);

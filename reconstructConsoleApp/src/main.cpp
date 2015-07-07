@@ -28,6 +28,13 @@ void addParameterSources(Framework* framework, int argc, char* argv[])
 {
     commandLineParameterSource = new CommandLineToolParameterSource(argc, argv);
     framework->parseAndAddParameterSource(commandLineParameterSource);
+
+    auto sourcesFromPlugins = framework->getPluginManager()->instantiateParameterSource();
+    for (auto it = sourcesFromPlugins.begin(); it != sourcesFromPlugins.end(); ++it)
+    {
+        framework->parseAndAddParameterSource(*it);
+    }
+
     if(commandLineParameterSource->parameterExists("configfile"))
     {
         xmlParameterSource = new XMLParameterSource(commandLineParameterSource->getStringParameter("configfile"));
@@ -114,7 +121,7 @@ int main(int argc, char* argv[])
         auto framework = new Framework(Logger::getInstance(), boost::filesystem::absolute(argv[0]).remove_filename());
         addParameterSources(framework, argc, argv);
         framework->initOpenCLStack();
-        ReconstructionAlgorithm* app = framework->instantiateReconstructionAlgorithm();;
+        ReconstructionAlgorithm* app = framework->instantiateReconstructionAlgorithm();
         app->run();
         framework->writeFinalVolume(app->getReconstructedVolume());
         LOGGER("Reconstruction finished.");

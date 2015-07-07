@@ -114,6 +114,17 @@ namespace ettention
         throw Exception("Reconstruction type " + identifier + " not supported! Plugin missing?");
     }
 
+    std::vector<ParameterSource*> PluginManager::instantiateParameterSource()
+    {
+        std::vector<ParameterSource*> parameterSources;
+        for (auto it = plugins.begin(); it != plugins.end(); ++it)
+        {
+            std::vector<ParameterSource*> op = it->second->instantiateParameterSource();
+            parameterSources.insert(parameterSources.end(), op.begin(), op.end());
+        }
+        return parameterSources;
+    }
+
     ProjectionSet* PluginManager::instantiateProjectionIterator(const std::string& identifier, ImageStackDatasource* source)
     {
         for(auto it = plugins.begin(); it != plugins.end(); ++it)
