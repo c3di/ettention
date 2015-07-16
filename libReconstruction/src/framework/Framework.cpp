@@ -10,7 +10,7 @@
 
 namespace ettention
 {
-    Framework::Framework(Logger& logger, const boost::filesystem::path& pathToPluginDirectory)
+    Framework::Framework(Logger& logger)
         : logger(logger)
         , clStack(0)
         , parameterSourceChanged(false)
@@ -19,7 +19,7 @@ namespace ettention
         volumeSerializer = new VolumeSerializer();
         forwardProjectionFactory = new ForwardProjectionFactory();
         backProjectionFactory = new BackProjectionFactory();
-        pluginManager = new PluginManager(this, pathToPluginDirectory);
+        pluginManager = new PluginManager(this);
         performanceReport = new PerformanceReport;
         parameterSource = new CascadingParameterSource;
         parameterSet = new AlgebraicParameterSet(parameterSource);

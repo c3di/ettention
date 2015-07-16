@@ -11,6 +11,8 @@
 #include <windows.h>
 #else
 #include <dlfcn.h>
+#include <unistd.h>
+#include <limits.h>
 #endif
 
 namespace ettention
@@ -18,13 +20,9 @@ namespace ettention
     PluginManager::PluginManager(Framework* framework)
         : framework(framework)
     {
-    }
-
-    PluginManager::PluginManager(Framework* framework, boost::filesystem::path pathToPluginDirectory)
-        : framework(framework)
-    {
-        scanDirectory(pathToPluginDirectory);
-    }
+		auto pluginPath = getPathToPluginDirectory();
+		scanDirectory( pluginPath );
+	}
 
     PluginManager::~PluginManager()
     {
@@ -33,6 +31,31 @@ namespace ettention
             delete *it;
         }
     }
+
+	boost::filesystem::path PluginManager::getPathToPluginDirectory()
+	{
+#ifdef WIN32
+		char buffer[1024];
+		size_t length = GetModuleFileName(NULL, buffer, sizeof(buffer) );
+		if ( length != 0 ) 
+		{
+			buffer[length] = '\0';
+			boost::filesystem::path exeFullPath = boost::filesystem::path( std::string( buffer ) );
+			return exeFullPath.remove_filename();
+		} else {
+			throw Exception("unable to detect path of executable");
+		}
+#else
+		char buffer[PATH_MAX];
+		ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer)-1);
+		if (len != -1) {
+			buffer[len] = '\0';
+			boost::filesystem::path exeFullPath = boost::filesystem::path( std::string( buffer ) );
+			return exeFullPath.remove_filename();
+		}
+		throw Exception("unable to detect path of executable");
+#endif
+	}
 
     void PluginManager::scanDirectory(boost::filesystem::path pathToPluginDirectory)
     {

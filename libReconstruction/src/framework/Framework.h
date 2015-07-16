@@ -17,7 +17,7 @@ namespace ettention
     class Framework
     {
     public:
-        Framework(Logger& logger, const boost::filesystem::path& pathToPluginDirectory = ".");
+        Framework( Logger& logger );
         ~Framework();
 
         Logger& getLogger() const;

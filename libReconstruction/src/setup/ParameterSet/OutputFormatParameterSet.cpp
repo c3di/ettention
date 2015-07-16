@@ -14,6 +14,7 @@ namespace ettention
 
     OutputFormatParameterSet::OutputFormatParameterSet(const ParameterSource* parameterSource)
     {
+        voxelType = FLOAT_32;
         voxelType = parseVoxelType(parameterSource->getStringParameter("output.options.voxelType"));
 
         invertData = false;

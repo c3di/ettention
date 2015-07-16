@@ -15,7 +15,6 @@ namespace ettention
     {
     public:
         PluginManager(Framework* framework);
-        PluginManager(Framework* framework, boost::filesystem::path pathToPluginDirectory);
         ~PluginManager();
 
         ReconstructionAlgorithm* instantiateReconstructionAlgorithm(const std::string& identifier, Framework* framework);
@@ -25,6 +24,7 @@ namespace ettention
         void registerPlugin(Plugin* plugin);
 
     protected:
+		boost::filesystem::path getPathToPluginDirectory();
         void scanDirectory(boost::filesystem::path pathToPluginDirectory);
         void loadPlugin(boost::filesystem::path pathToPlugin);
 

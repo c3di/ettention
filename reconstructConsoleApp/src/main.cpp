@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
         initializeLogger();
         LOGGER("Ettention, version 2015, (c) DFKI GmbH 2015");
         Logger::getInstance().forceLogFlush();
-        auto framework = new Framework(Logger::getInstance(), boost::filesystem::absolute(argv[0]).remove_filename());
+        auto framework = new Framework( Logger::getInstance() );
         addParameterSources(framework, argc, argv);
         framework->initOpenCLStack();
         ReconstructionAlgorithm* app = framework->instantiateReconstructionAlgorithm();
