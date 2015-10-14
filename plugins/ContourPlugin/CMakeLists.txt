@@ -58,7 +58,7 @@ link_directories("${Boost_LIBRARY_DIRS}")
 
 add_library(${PROJECT_NAME} SHARED ${HOST_SOURCES} ${OCL_SOURCES} ${OCL_HEADERS} ${TEMPORARY_OCL_FILES})
 
-add_dependencies(ContourPlugin compile_kernel bin2c libReconstruction memoryManager)
+add_dependencies(ContourPlugin compile_kernel bin2c libReconstruction MemoryManager)
 
 target_link_libraries(${PROJECT_NAME}
 				libReconstruction

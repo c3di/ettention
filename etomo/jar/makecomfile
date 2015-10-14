@@ -264,9 +264,7 @@ elif typeName == 'sirtsetup':
 # ETTENTIONSETUP
 elif typeName == 'ettentionsetup':
    comlines = ['# Command file for running ettentionsetup created by makecomfile',
-               '$ettentionsetup -StandardInput',
-			   'algorithm.lambda	0.3'
-               'algorithm.numberOfIterations 3']
+               '$ettentionsetup -StandardInput']
 
 # Do common tasks and finish
 if sedcom:

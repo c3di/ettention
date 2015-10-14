@@ -4,8 +4,8 @@
 #include "framework/Logger.h"
 #include "framework/plugins/PluginManager.h"
 #include "framework/time/Timer.h"
+#include "framework/error/ParameterNotFoundException.h"
 #include "gpu/opencl/CLAbstractionLayer.h"
-#include "gpu/opencl/CLContextCreator.h"
 #include "io/serializer/VolumeSerializer.h"
 #include "setup/ParameterSet/AlgebraicParameterSet.h"
 #include "setup/ParameterSet/AlgorithmParameterSet.h"
@@ -24,29 +24,40 @@ using namespace ettention;
 CommandLineToolParameterSource* commandLineParameterSource = nullptr;
 XMLParameterSource* xmlParameterSource = nullptr;
 
-void addParameterSources(Framework* framework, int argc, char* argv[])
+void initializeLogger()
 {
-    commandLineParameterSource = new CommandLineToolParameterSource(argc, argv);
-    framework->parseAndAddParameterSource(commandLineParameterSource);
+    Logger::getInstance().activateConsoleLog();
+    Logger::getInstance().LogFilename("ettention.log");
+    Logger::getInstance().activateFileLog();
+    LOGGER("Ettention, version 2015, (c) DFKI GmbH 2015");
+    Logger::getInstance().forceLogFlush();
+}
 
+void addParameterSources(Framework* framework)
+{
+    framework->parseAndAddParameterSource(commandLineParameterSource);
     auto sourcesFromPlugins = framework->getPluginManager()->instantiateParameterSource();
     for (auto it = sourcesFromPlugins.begin(); it != sourcesFromPlugins.end(); ++it)
     {
         framework->parseAndAddParameterSource(*it);
     }
 
-    if(commandLineParameterSource->parameterExists("configfile"))
+    if( commandLineParameterSource->parameterExists("config") )
     {
-        xmlParameterSource = new XMLParameterSource(commandLineParameterSource->getStringParameter("configfile"));
+        LOGGER("Loading configuration from XML file...");
+        xmlParameterSource = new XMLParameterSource(commandLineParameterSource->getStringParameter("config"));
         framework->parseAndAddParameterSource(xmlParameterSource);
     }
 }
 
-void initializeLogger()
+void doReconstruction(Framework* framework)
 {
-    Logger::getInstance().activateConsoleLog();
-    Logger::getInstance().LogFilename("ettention.log");
-    Logger::getInstance().activateFileLog();
+    LOGGER("Launching reconstruction algorithm...");
+    ReconstructionAlgorithm* app = framework->instantiateReconstructionAlgorithm();
+    app->run();
+    framework->writeFinalVolume(app->getReconstructedVolume());
+    delete app;
+    LOGGER("Reconstruction finished.");
 }
 
 void printCLDeviceList(bool printExtensions)
@@ -60,15 +71,15 @@ void printCLDeviceList(bool printExtensions)
     std::cout << "----|------|";
     std::stringstream table;
     unsigned int maxDetailLength = 0;
-    for(unsigned int i = 0; i < devices.size(); ++i)
+    for( unsigned int i = 0; i < devices.size(); ++i )
     {
         std::string detail = devices[i].name + ", " + devices[i].version;
         table << " " << std::setfill(' ') << std::setw(2) << i << " | " << devices[i].type << "  | " << detail << std::endl;
-        if(printExtensions)
+        if( printExtensions )
         {
-            for(auto it = devices[i].extensions.begin(); it != devices[i].extensions.end(); ++it)
+            for( auto it = devices[i].extensions.begin(); it != devices[i].extensions.end(); ++it )
             {
-                if(!(*it).empty())
+                if( !(*it).empty() )
                 {
                     table << "    |      |  " << *it << std::endl;
                     maxDetailLength = std::max(maxDetailLength, (unsigned int)(*it).length());
@@ -78,69 +89,90 @@ void printCLDeviceList(bool printExtensions)
         table << "    |      |" << std::endl;
         maxDetailLength = std::max(maxDetailLength, (unsigned int)detail.length());
     }
-    for(unsigned int i = 0; i < maxDetailLength + 2; ++i)
+    for( unsigned int i = 0; i < maxDetailLength + 2; ++i )
     {
         std::cout << "-";
     }
     std::cout << std::endl << "    |      |" << std::endl << table.str();
     std::cout << "----|------|";
-    for(unsigned int i = 0; i < maxDetailLength + 2; ++i)
+    for( unsigned int i = 0; i < maxDetailLength + 2; ++i )
     {
         std::cout << "-";
     }
     std::cout << std::endl;
 }
 
+void printError(std::string message)
+{
+    std::cerr << "Error: " << message << std::endl;
+    LOGGER("Error: " + message);
+}
+
 int main(int argc, char* argv[])
 {
     try
     {
-        bool printDevices = false;
-        bool printExtensions = false;
-        for(int i = 0; i < argc; ++i)
+        initializeLogger();
+
+        commandLineParameterSource = new CommandLineToolParameterSource(argc, argv);
+        commandLineParameterSource->parse();
+        auto mode = commandLineParameterSource->getCurrentState();
+        if( (mode == CLI_APP_STATE::HELP) || (mode == CLI_APP_STATE::PARAMETERS) )
         {
-            std::string arg(argv[i]);
-            if(arg == "--devices" || arg == "-d")
-            {
-                printDevices = true;
-            }
-            else if(arg == "--devicesAndExtensions" || arg == "-de")
-            {
-                printDevices = true;
-                printExtensions = true;
-            }
-        }
-        if(printDevices)
-        {
-            printCLDeviceList(printExtensions);
+            if( mode == CLI_APP_STATE::PARAMETERS)
+                std::cout << commandLineParameterSource->getConsoleParametersFullList() << std::endl;
+            else
+                std::cout << commandLineParameterSource->getConsoleParametersShortList() << std::endl;
+            delete commandLineParameterSource;
             return 0;
         }
-        initializeLogger();
-        LOGGER("Ettention, version 2015, (c) DFKI GmbH 2015");
-        Logger::getInstance().forceLogFlush();
-        auto framework = new Framework( Logger::getInstance() );
-        addParameterSources(framework, argc, argv);
+
+        auto framework = new Framework(Logger::getInstance());
+        addParameterSources(framework);
         framework->initOpenCLStack();
-        ReconstructionAlgorithm* app = framework->instantiateReconstructionAlgorithm();
-        app->run();
-        framework->writeFinalVolume(app->getReconstructedVolume());
-        LOGGER("Reconstruction finished.");
-        delete app;
+
+        switch( mode )
+        {
+        case CLI_APP_STATE::RECONSTRUCT:
+            doReconstruction(framework);
+            break;
+
+        case CLI_APP_STATE::DEVICES:
+            printCLDeviceList(false);
+            break;
+
+        case CLI_APP_STATE::DEVICESANDEXTENSIONS:
+            printCLDeviceList(true);
+            break;
+
+        case CLI_APP_STATE::DEFAULT:
+        default:
+            // Check the existence of all required parameters and run reconstruction
+            try
+            {
+                doReconstruction(framework);
+            } catch( ParameterNotFoundException& e )
+            {
+                printError("Missing required parameter. Set it by using --" + e.getParameter() + " <value> cmd argument or load from XML config file by --config <path> argument");
+            }
+            break;
+        }
+
         delete framework;
     }
     catch(const std::exception& e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
+        printError(e.what());
         return 1;
     }
     catch(const std::exception* e)
     {
-        std::cerr << "Error: " << e->what() << std::endl;
+        printError(e->what());
         return 1;
     }
     catch(...)
     {
-        std::cerr << "Error: Unknown error" << std::endl;
+        printError("Unknown error");
         return 2;
     }
     delete xmlParameterSource;

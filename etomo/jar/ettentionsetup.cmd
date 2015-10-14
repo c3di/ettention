@@ -1,1 +1,1 @@
-%IMOD_DIR%\bin\ettention.exe
+"%IMOD_DIR%\bin\ettention.exe"

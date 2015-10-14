@@ -98,7 +98,7 @@ namespace ettention
                     }
                     else if(paramName == "MODE")
                     {
-                        storage.insertOrRewriteScalarParameter<std::string>("output.voxelType", "string", GetVoxelType(paramValue));
+                        storage.insertOrRewriteScalarParameter<std::string>("output.options.voxelType", "string", GetVoxelType(paramValue));
                     }
                     else if(paramName == "XAXISTILT")
                     {
@@ -181,8 +181,8 @@ namespace ettention
 
         void EtomoParameterSource::addInternalParameters()
         {
-            storage.insertOrRewriteScalarParameter<bool>("output.invert", "bool", true);
-            storage.insertOrRewriteScalarParameter<std::string>("output.orientation", "string", "xzy_order");
+            storage.insertOrRewriteScalarParameter<bool>("output.options.invert", "bool", true);
+            storage.insertOrRewriteScalarParameter<std::string>("output.options.orientation", "string", "xzy_order");
             storage.insertOrRewriteScalarParameter<std::string>("projectionIteration", "string", "maxangle");
         }
 

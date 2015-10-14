@@ -106,6 +106,11 @@ namespace ettention
         return parameterSet;
     }
 
+    CascadingParameterSource* Framework::getParameterSource()
+    {
+        return parameterSource;
+    }
+
     void Framework::parseAndAddParameterSource(ParameterSource* parameterSource)
     {
         if(clStack)

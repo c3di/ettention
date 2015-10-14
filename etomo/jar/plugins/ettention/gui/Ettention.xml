@@ -26,15 +26,15 @@
 		<format caption="Format" type="enum(mrc,rek,#custom)" required="false">
 			<helptext>This parameter specifies in which file format the output volume is written. Legal ids are “mrc” (MRC stack) and “rek” (Fraunhofer REK format). It the parameter is not specified, the system uses the extension of the filename in the output. Additional file formats can be provided via plugins.</helptext>
 		</format>
-		<voxelType caption="Voxel type" type="enum(unsigned8,unsigned16,float32)" required="false">
+		<options.voxelType caption="Voxel type" type="enum(unsigned8,unsigned16,float32)" required="false" default="float32">
 				<helptext>This parameter specifies the encoding of an individual voxel in the output stack. For the floating point voxel type float32, values are stored “as they are”. For the fixed precision voxel types (unsigned8 and unsigned16), values are scaled to exploit the available data range as best as possible, i.e. the lowest value is mapped to zero and the highest value in the volume to the highest available integer value in the encoding. If the parameter is not specified, the value is set according to the MODE parameter in tilt.com.</helptext>
-		</voxelType>
-		<orientation caption="Orientation" type="enum(xzy_order,xyz_order)" required="false">
+		</options.voxelType>
+		<options.orientation caption="Orientation" type="enum(xzy_order,xyz_order)" required="false">
 				<helptext>This parameter specifies, in which orientation the output volume is written to disc, i.e. what coordinate layout order is used. The possible values are xzy_order and xyz_order. Default is the xzy layout which corresponds to the output orientation of other reconstruction techniques provided by etomo (WBP, SIRT).</helptext>
-		</orientation>
-		<invert caption="Invert" type="boolean" required="false" default="false">
+		</options.orientation>
+		<options.invert caption="Invert" type="boolean" required="false" default="false">
 				<helptext>If set to true, the output volume will be inverted in the sense, that the absolute range of the values are preserved by the role high- and low contrast are exchanged, i.e. bright voxels become dark and vice versa.</helptext>
-		</invert>
+		</options.invert>
 	</output>
 	
 	<hardware caption="Hardware parameters">

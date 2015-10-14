@@ -1,6 +1,7 @@
 #pragma once
+
+#include <clAmdFft.h>
 #include "gpu/ComputeKernel.h"
-#include "clAmdFft.h"
 
 namespace ettention
 {

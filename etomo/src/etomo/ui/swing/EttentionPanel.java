@@ -64,69 +64,69 @@ import etomo.ui.FieldValidationFailedException;
 
 /**
 * <p>Description: </p>
-* 
+*
 * <p>Copyright: Copyright 2010</p>
 *
 * <p>Organization:
 * Boulder Laboratory for 3-Dimensional Electron Microscopy of Cells (BL3DEMC),
 * University of Colorado</p>
-* 
+*
 * @author $Author$
-* 
+*
 * @version $Revision$
-* 
+*
 */
 final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDisplay, Expandable,
     FieldObserver {
   public static final String rcsid = "$Id$";
-  
+
   private final JPanel pnlRoot = new JPanel();
 
   private final ButtonGroup bgMethod = new ButtonGroup();
-  
+
   private final RadioButton rbETSart = new RadioButton("SART", bgMethod);
   private final RadioButton rbETSirt = new RadioButton("SIRT", bgMethod);
   private final RadioTextField rbETOSSirt = new RadioTextField(FieldType.INTEGER, "OS-SIRT - Number of projections: ", bgMethod, null);
   //private final RadioTextField rbETPlugin = new RadioTextField(FieldType.STRING, "Plugin: ", bgMethod, null);
   private final RadioButton rbETPlugin = new RadioButton("Plugin: ", bgMethod);
   private final JComboBox cmbETPlugin = new JComboBox();
-  
+
   private final CheckTextField ctfOversamplingForwardProjection = CheckTextField.getNumericInstance(
 	      FieldType.INTEGER, "Oversampling in forward projection step: ",
 	      EtomoNumber.Type.INTEGER);
-  
+
   private final CheckTextField ctfOversamplingBackProjection = CheckTextField.getNumericInstance(
 	      FieldType.INTEGER, "Oversampling in back projection step: ",
 	      EtomoNumber.Type.INTEGER);
-  
+
   private final CheckBox cbUseLongObjectCompensation = new CheckBox("Use long object compensation");
-  
+
   private final LabeledTextField ltfNumberOfIterations = new LabeledTextField(
       FieldType.INTEGER, "Number of iterations: ");
   private final LabeledTextField ltfLambda = new LabeledTextField(
 	      FieldType.FLOATING_POINT, "Relaxation parameter lambda: ");
-  
+
   private final CheckBox cbSubarea = new CheckBox("Reconstruct subarea");
   private final LabeledTextField ltfSubareaSize = new LabeledTextField(
 	      FieldType.STRING, "Subarea size: ");
   private final LabeledTextField ltfSubareaCenter = new LabeledTextField(
 	      FieldType.STRING, "Subarea center: ");
-  
+
   private HashMap<String, Object> extendedGUIParameter = new HashMap<String, Object>();
-  
+
   private final ActionListener listener = new EttentionActionListener(this);
   private final Run3dmodButton btn3dmodEttention = Run3dmodButton.get3dmodInstance(
       "View Tomogram In 3dmod", this);
-  
+
   private final SpacedPanel pnlEttentionsetupParamsBody = SpacedPanel.getInstance(true);
  // private final SpacedPanel pnlAvailablePluginsBody = SpacedPanel.getInstance(true);
-  
+
   private final List<ResumeObserver> resumeObservers = new ArrayList();
   private final List<FieldObserver> fieldObservers = new ArrayList();
   private final List<JPanel> advancedPanels = new ArrayList();
   private final List<JPanel> pluginsPanels = new ArrayList();
   private final LinkedHashMap<String,String> pluginsNames = new LinkedHashMap<String, String>();
-  
+
   private final AxisID axisID;
   private final ApplicationManager manager;
   private final Run3dmodButton btnEttention;
@@ -170,11 +170,11 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     return pnlRoot;
   }
 
-  private void createExtendedPanel(JPanel pnlAdvanced, JPanel pnlPlugins) 
+  private void createExtendedPanel(JPanel pnlAdvanced, JPanel pnlPlugins)
   {
-	  String basePathToConfigFiles = System.getenv("IMOD_DIR") + "/bin/plugins/gui";
+	  String basePathToConfigFiles = System.getenv("IMOD_DIR") + "/bin/plugins/ettention/gui";
 	  addParametersFromFile( basePathToConfigFiles + "/Ettention.xml", pnlAdvanced, false );
-	  
+
 	  File dir = new File( basePathToConfigFiles );
 	  System.out.println("traversing directory " + basePathToConfigFiles );
 	  File[] fileSystemChildren = dir.listFiles();
@@ -201,60 +201,60 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 		  addParametersFromFile( file.getAbsolutePath(), pnlPlugins, true );
 	  }
   }
-  
+
   private void addParametersFromFile( String filename, JPanel parentPanel,  boolean isPluginGroup )
   {
 	  DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 	  DocumentBuilder builder = null;
 	  Document document = null;
-		
-	  try 
+
+	  try
 	  {
 		  builder = builderFactory.newDocumentBuilder();
 		  document = builder.parse( new FileInputStream( filename ) );
-		  
-		  NodeList groupList = document.getDocumentElement().getChildNodes();	  	  
+
+		  NodeList groupList = document.getDocumentElement().getChildNodes();
 		  for (int i = 0; i < groupList.getLength(); i++)
 		  {
 			  Node groupNode = groupList.item(i);
 			  if ( groupNode.getNodeType() == Node.ELEMENT_NODE )
 				  handleParameterGroup(groupNode, parentPanel, isPluginGroup );
 		  }
-		  
+
 	  } catch ( ParserConfigurationException e ) {
 		  e.printStackTrace();
 	  } catch ( SAXException e ) {
 		  e.printStackTrace();
 	  } catch ( IOException e ) {
 		  e.printStackTrace();
-	  }	  
+	  }
   }
-  
+
   private void handleParameterGroup( Node groupNode,  JPanel parentPanel, boolean isPluginGroup  )
   {
 	  JPanel pnlGroup = new JPanel();
- 
+
 	  pnlGroup.setLayout( new BoxLayout(pnlGroup, BoxLayout.Y_AXIS) );
 	  pnlGroup.setBorder(BorderFactory.createEtchedBorder());
-	  
+
 	  Element groupElement = (Element) groupNode;
-	  
+
 	  addCaptionToPanel(pnlGroup, groupElement.getAttribute("caption"), groupElement.getAttribute("id") );
 
-	  NodeList groupList = groupNode.getChildNodes();	  	  
+	  NodeList groupList = groupNode.getChildNodes();
 	  for (int i = 0; i < groupList.getLength(); i++)
 	  {
 		  Node parameterNode = groupList.item(i);
 		  if ( parameterNode.getNodeType() == Node.ELEMENT_NODE )
-		  {			  
+		  {
 			  String helpText = getHelpText(parameterNode);
 			  Element parameterElement = (Element) parameterNode;
-			  javax.swing.JComponent widget = generateWidgetForParameter(parameterNode);		 
-			  
+			  javax.swing.JComponent widget = generateWidgetForParameter(parameterNode);
+
 			  addWidgetToPanel(pnlGroup, widget, parameterElement.getAttribute("caption"), helpText);
-			  	  
+
 			  String parameterKey = groupElement.getTagName() + "." + parameterElement.getTagName();
-			  
+
 			  extendedGUIParameter.put(parameterKey, widget);
 		  }
 	  }
@@ -266,7 +266,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 		  advancedPanels.add(pnlGroup);
 	  }
   }
-  
+
   private String getHelpText(Node parameterNode)
   {
 	  NodeList sublist = parameterNode.getChildNodes();
@@ -280,17 +280,17 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 			  break;
 		  }
 	  }
-	  
+
 	  return helpText;
   }
-  
+
   private void addCaptionToPanel(JPanel pnlGroup, String caption,  String id)
   {
 	  String captionWithID = "  " + caption;
 	  if(!id.isEmpty()){
 		  pluginsNames.put(caption,id);
 	  }
-	  
+
 	  JPanel pnlCaption = new JPanel();
 	  pnlCaption.setLayout( new BoxLayout(pnlCaption, BoxLayout.Y_AXIS) );
 	  pnlCaption.setAlignmentX(Box.CENTER_ALIGNMENT);
@@ -300,11 +300,11 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 	  pnlCaption.add(Box.createHorizontalGlue());
 	  pnlGroup.add( pnlCaption );
   }
-  
+
   private void addWidgetToPanel(JPanel pnlGroup, javax.swing.JComponent widget, String caption, String helpText)
   {
 	  JPanel pnlParameter = new JPanel();
-	  
+
 	  if ( widget instanceof JTextField )
 	  {
 		  pnlParameter.setLayout( new BoxLayout(pnlParameter, BoxLayout.X_AXIS) );
@@ -322,10 +322,10 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 	  }
 
 	  widget.setToolTipText("<html><p width=\"350px\">" + helpText + "</p></html>");
-	  pnlGroup.add( pnlParameter );	  
+	  pnlGroup.add( pnlParameter );
 	  pnlGroup.add(Box.createHorizontalGlue());
   }
-  
+
   private javax.swing.JComponent generateWidgetForParameter( Node parameterNode )
   {
 	  Element parameterElement = (Element) parameterNode;
@@ -334,13 +334,13 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 		  JCheckBox checkBox = new JCheckBox(parameterElement.getAttribute("caption"));
 		  checkBox.setSelected( parameterElement.getAttribute("default").equals("true") );
 		  return checkBox;
-	  } 
-	  
-	  JTextField textField = new JTextField(); 
-	  textField.setText( parameterElement.getAttribute("default") );	  
+	  }
+
+	  JTextField textField = new JTextField();
+	  textField.setText( parameterElement.getAttribute("default") );
 	  return textField;
   }
-  
+
   private void createPanel() {
     // initialize
 	JPanel pnlSubarea = new JPanel();
@@ -371,7 +371,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     pnlRoot.add(pnlAvailablePlugins);
     pnlRoot.add(Box.createRigidArea(FixedDim.x0_y10));
     pnlRoot.add(pnlButtons);
-    
+
     // Ettention panel
 
     // Ettention params panel
@@ -388,41 +388,41 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     pnlEttentionsetupParamsBody.add(pnlOversamplingOptions);
     pnlEttentionsetupParamsBody.add(pnlSubarea);
     pnlEttentionsetupParamsBody.add(pnlAdvancedParams);
-    
-   // pnlEttentionsetupParams.add(pnlEttentionsetupParamsBody.getContainer()); 
+
+   // pnlEttentionsetupParams.add(pnlEttentionsetupParamsBody.getContainer());
     pnlETmethod1.setLayout(new BoxLayout(pnlETmethod1, BoxLayout.X_AXIS));
     pnlETmethod1.add(rbETSart.getComponent());
     pnlETmethod1.add(rbETSirt.getComponent());
-    pnlETmethod1.add(rbETOSSirt.getContainer());  
+    pnlETmethod1.add(rbETOSSirt.getContainer());
     pnlETmethod2.setLayout(new BoxLayout(pnlETmethod2, BoxLayout.X_AXIS));
     pnlETmethod2.add(rbETPlugin.getComponent());
     pnlETmethod2.add(cmbETPlugin);
-    
+
     // Ettention params body panel
-    
+
     pnlBasicOptions.setLayout(new BoxLayout(pnlBasicOptions, BoxLayout.Y_AXIS));
     pnlBasicOptions.setAlignmentX(Box.CENTER_ALIGNMENT);
     pnlBasicOptions.add(ltfLambda.getComponent());
     pnlBasicOptions.add(ltfNumberOfIterations.getComponent());
     pnlBasicOptions.add(Box.createHorizontalGlue());
-    
+
    // pnlEttentionsetupParams.add(pnlUseLongObjectCompensation);
     pnlUseLongObjectCompensation.setLayout(new BoxLayout(pnlUseLongObjectCompensation, BoxLayout.X_AXIS));
     pnlUseLongObjectCompensation.setAlignmentX(Box.CENTER_ALIGNMENT);
     pnlUseLongObjectCompensation.add(cbUseLongObjectCompensation);
     pnlUseLongObjectCompensation.add(Box.createHorizontalGlue());
-        
+
     pnlOversamplingOptions.setLayout(new BoxLayout(pnlOversamplingOptions, BoxLayout.Y_AXIS));
     pnlOversamplingOptions.setAlignmentX(Box.CENTER_ALIGNMENT);
     pnlOversamplingOptions.add(ctfOversamplingForwardProjection.getComponent());
     pnlOversamplingOptions.add(ctfOversamplingBackProjection.getComponent());
     pnlOversamplingOptions.add(Box.createHorizontalGlue());
-    
+
     pnlSubareaCB.setLayout(new BoxLayout(pnlSubareaCB, BoxLayout.X_AXIS));
     pnlSubareaCB.setAlignmentX(Box.CENTER_ALIGNMENT);
     pnlSubareaCB.add(cbSubarea);
     pnlSubareaCB.add(Box.createHorizontalGlue());
-    
+
     // Subarea panel
     pnlSubarea.setLayout(new BoxLayout(pnlSubarea, BoxLayout.Y_AXIS));
     pnlSubarea.setBorder(BorderFactory.createEtchedBorder());
@@ -444,7 +444,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     pnlPluginsContainer.setLayout(new BoxLayout(pnlPluginsContainer, BoxLayout.Y_AXIS));
     pnlPluginsContainer.add(Box.createRigidArea(FixedDim.x0_y5));
     createExtendedPanel(pnlAdvancedParams,pnlPluginsContainer);
-           
+
    if(!pluginsPanels.isEmpty()){
     	pnlAvailablePlugins.setLayout(new BoxLayout(pnlAvailablePlugins, BoxLayout.Y_AXIS));
     	pnlAvailablePlugins.setBorder(BorderFactory.createEtchedBorder());
@@ -453,7 +453,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     	pnlAvailablePlugins.add(pnlAvailablePluginsBody.getContainer());
     	pnlAvailablePluginsBody.setBoxLayout(BoxLayout.Y_AXIS);
     	pnlAvailablePluginsBody.add(pnlPluginsContainer);
-    	
+
     	pnlAvailablePluginsLabel.setLayout(new BoxLayout(pnlAvailablePluginsLabel, BoxLayout.X_AXIS));
     	pnlAvailablePluginsLabel.setAlignmentX(Box.CENTER_ALIGNMENT);
     	pnlAvailablePluginsLabel.add(Box.createRigidArea(FixedDim.x0_y5));
@@ -464,28 +464,28 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     else{
     	rbETPlugin.setEnabled(false);
     }
-    	
+
     // Buttons panel
     pnlButtons.setLayout(new BoxLayout(pnlButtons, BoxLayout.X_AXIS));
     pnlButtons.add(btnEttention.getComponent());
     pnlButtons.add(btn3dmodEttention.getComponent());
-    pnlButtons.add(btnUseEttention.getComponent());    
-   
+    pnlButtons.add(btnUseEttention.getComponent());
+
     // defaults
     rbETSart.setSelected(true);
     cbUseLongObjectCompensation.setSelected(true);
     cmbETPlugin.setEnabled(false);
     updateDisplay();
   }
-  
+
   private void fillComboBox()
   {
-	  for (String key : pluginsNames.keySet() ) 
+	  for (String key : pluginsNames.keySet() )
       {
-      	cmbETPlugin.addItem(key);           
+      	cmbETPlugin.addItem(key);
       }
   }
-  
+
   private void addListeners() {
     btnEttention.addActionListener(listener);
     btn3dmodEttention.addActionListener(listener);
@@ -518,11 +518,11 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 	      i.next().msgFieldChanged(diff);
 	    }
   }
-	  
+
   boolean isDifferentFromCheckpoint() {
 	  return false;
   }
-	  
+
   public void msgFieldChanged(final boolean differentFromCheckpoint) {
     differentFromCheckpointFlag = differentFromCheckpoint;
     updateDisplay();
@@ -566,16 +566,16 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 
   void setParameters(final ConstMetaData metaData) {
   }
-	  
+
 
   public boolean getParameters(final EttentionsetupParam param, final boolean doValidation) {
     try {
-  
+
         param.additionalParameter.clear();
-        for (String key : extendedGUIParameter.keySet() ) 
+        for (String key : extendedGUIParameter.keySet() )
         {
         	StringParameter parameter = new StringParameter( key );
-        	
+
         	Object component = extendedGUIParameter.get(key);
         	if ( component instanceof JTextField )
         	{
@@ -595,9 +595,9 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
         		else
         			parameter.set( "false" );
         	}
-        	param.additionalParameter.addLast( parameter );            
+        	param.additionalParameter.addLast( parameter );
         }
- 	
+
         param.setLambda(ltfLambda.getText(doValidation));
         param.setNumberOfIterations(ltfNumberOfIterations.getText(doValidation));
         if (cbSubarea.isSelected()) {
@@ -612,7 +612,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
                 return false;
             }
             param.setSubareaSize(ltfSubareaSize.getText());
-            param.setSubareaCenter(ltfSubareaCenter.getText());                    
+            param.setSubareaCenter(ltfSubareaCenter.getText());
           }
           else {
             param.resetSubareaSize();
@@ -640,7 +640,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
           else {
             param.resetOversamplingBackProjection();
         }
-        
+
         param.setUseLongObjectCompensation(cbUseLongObjectCompensation.isSelected());
         param.setReconstructionType(getReconstructionType());
        /* if (rbETPlugin.isSelected()) {
@@ -650,27 +650,27 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
             return false;
         	}
         }*/
-        	
+
         if(param.getReconstructionType().equals("blockIterative"))
         {
         	if (rbETOSSirt.getText().isEmpty()) {
                 UIHarness.INSTANCE.openMessageDialog(manager, rbETOSSirt.getLabel()
                     + " is empty.", "Entry Error", axisID);
                 return false;
-             } 
+             }
         	param.setNumberOfProjections(rbETOSSirt.getText(doValidation));
         }
         else {
             param.resetNumberOfProjections();
         }
-        
+
         return true;
     }
     catch (FieldValidationFailedException e) {
       return false;
     }
   }
-  
+
   public String getReconstructionType()
   {
 	  if(rbETSart.isSelected())
@@ -693,7 +693,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
   }
 
   void setParameters(final EttentionsetupParam param) {
-    
+
 	  ltfLambda.setText(param.getLambda());
 	  ltfNumberOfIterations.setText(param.getNumberOfIterations());
 	  rbETOSSirt.setText(param.getNumberOfProjections());
@@ -708,7 +708,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
   void checkpoint(TomogramState state) {
 	    updateDisplay();
   }
-  
+
   /**
    * Load all of the .srecdd files in the current directory (any number of digits).  Save
    * the digits in the ResumeFromIteration pulldown list.
@@ -783,7 +783,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
 	  while (pnlIterator.hasNext()) {
 		  pnlIterator.next().setVisible(advanced);
 	  }
-	  
+
   }
 
   public void expand(final GlobalExpandButton button) {
@@ -870,7 +870,7 @@ final class EttentionPanel implements Run3dmodButtonContainer, EttentionsetupDis
     catch (LogFile.LockException e) {
       e.printStackTrace();
     }
-    
+
     rbETSart.setToolTipText("Use SART method for reconstruction. Volume is updated after one projection.");
     rbETSirt.setToolTipText("Use SIRT method for reconstruction. Volume is updated after all projections.");
     rbETOSSirt.setToolTipText("Use Ordered Subset SIRT (OS-SIRT) method for reconstruction. Specify the number of projections for volume update.");

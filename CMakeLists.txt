@@ -44,7 +44,7 @@ add_subdirectory(memoryManager)
 add_subdirectory(libReconstruction)
 add_dependencies(libReconstruction compile_kernel)
 add_dependencies(libReconstruction bin2c)
-add_dependencies(libReconstruction memoryManager)
+add_dependencies(libReconstruction MemoryManager)
 
 # command line tool
 add_subdirectory(reconstructConsoleApp)
@@ -52,9 +52,9 @@ add_subdirectory(reconstructConsoleApp)
 # automated tests
 add_subdirectory(libReconstructionTest)
 add_dependencies(libReconstructionUnitTest libReconstruction)
-add_dependencies(libReconstructionUnitTest memoryManager)
+add_dependencies(libReconstructionUnitTest MemoryManager)
 add_dependencies(libReconstructionIntegrationTest libReconstruction)
-add_dependencies(libReconstructionIntegrationTest memoryManager)
+add_dependencies(libReconstructionIntegrationTest MemoryManager)
 
 # plugins
 SUBDIRLIST(PLUGINS "${CMAKE_CURRENT_SOURCE_DIR}/plugins")

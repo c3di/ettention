@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(memoryManager)
+project(MemoryManager)
 
 INCLUDE(../cmake_custom/CommonFlags)
 
@@ -7,7 +7,7 @@ SetPolicies()
 
 if(MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP -Zm200")
-	add_definitions(/DNOMINMAX /D_CRT_SECURE_NO_WARNINGS /D_USE_MATH_DEFINES /DCOMPILING_DLL)	
+	add_definitions(/DNOMINMAX /D_CRT_SECURE_NO_WARNINGS /D_USE_MATH_DEFINES /DCOMPILING_DLL)
 endif(MSVC)
 
 # find all directories containing source files

@@ -2,7 +2,7 @@ REM @echo off
 
 set /p ETTENTION_DEPENDENCIES_VERSION=<dependencies_version.txt
 set ETTENTION_DEPENDENCIES_FILE=..\ettention_dependencies_%ETTENTION_DEPENDENCIES_VERSION%.7z
-set ETTENTION_DEPENDENCIES_URL="https://graphics.cg.uni-saarland.de/fileadmin/cguds/projects/ettention/ettention_dependencies_%ETTENTION_DEPENDENCIES_VERSION%.7z"
+set ETTENTION_DEPENDENCIES_URL="https://ettention.cg.uni-saarland.de/wp-content/uploads/dependencies/ettention_dependencies_%ETTENTION_DEPENDENCIES_VERSION%.7z"
 set ETTENTION_DEPENDENCIES_FILE_ABSOLUTE=%cd%\..\ettention_dependencies_%ETTENTION_DEPENDENCIES_VERSION%.7z
 
 IF NOT EXIST %ETTENTION_DEPENDENCIES_FILE_ABSOLUTE% (

@@ -31,7 +31,7 @@ namespace ettention
         void parseAndAddParameterSource(ParameterSource* parameterSource);
         AlgebraicParameterSet* getParameterSet();
         PerformanceReport* getPerformanceReport();
-
+        CascadingParameterSource* getParameterSource();
         PluginManager* getPluginManager() const;
 
         CLAbstractionLayer* getOpenCLStack();

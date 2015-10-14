@@ -21,16 +21,16 @@ namespace ettention
             xAxisTilt = parameterSource->getFloatParameter("input.xAxisTilt");
 
         mode = FileMode::UNSPECIFIED;
-        if(parameterSource->parameterExists("output.voxelType"))
-            mode = parseFileMode(parameterSource->getStringParameter("output.voxelType"));
+        if(parameterSource->parameterExists("output.options.voxelType"))
+            mode = parseFileMode(parameterSource->getStringParameter("output.options.voxelType"));
 
         logaritmizeData = false;
         if(parameterSource->parameterExists("input.logaritmize"))
             logaritmizeData = parameterSource->getBoolParameter("input.logaritmize");
 
         outputVolumeRotation = ALONG_XZ;
-        if(parameterSource->parameterExists("output.orientation"))
-            outputVolumeRotation = parseVolumeRotation(parameterSource->getStringParameter("output.orientation"));
+        if(parameterSource->parameterExists("output.options.orientation"))
+            outputVolumeRotation = parseVolumeRotation(parameterSource->getStringParameter("output.options.orientation"));
 
         MRCWriter writer;
         outputVolumeFormat = writer.getFileExtension();

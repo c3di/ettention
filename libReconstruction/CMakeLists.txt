@@ -66,7 +66,7 @@ ENDIF()
 target_link_libraries(${PROJECT_NAME}
 				"${OPENCL_LIBRARIES}"
 				"${CLAMDFFT_LIBRARIES}"
-				memoryManager
+				MemoryManager
 				debug
 				"${FREEIMAGE_LIBRARIES_DEBUG}"
 				optimized
