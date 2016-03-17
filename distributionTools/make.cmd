@@ -1,0 +1,24 @@
+@ECHO OFF
+
+ECHO Creating solution...
+SET ETTENTION_PLATFORM=msvc12_x64
+SET "ETTENTION_GENERATOR=Visual Studio 12 Win64"
+
+CALL .\get_dependencies.cmd
+
+IF [%1]==[] SET BUILD_DIR=%CD%\..\build
+IF NOT [%1]==[] SET BUILD_DIR=%1
+IF EXIST %BUILD_DIR%\ RMDIR /S /Q %BUILD_DIR%\
+ECHO Solution will be placed in %BUILD_DIR%.
+MKDIR %BUILD_DIR%
+PUSHD %BUILD_DIR%
+
+ECHO Using CMake (%ETTENTION_GENERATOR%) to generate solution:
+cmake -G "%ETTENTION_GENERATOR%" ..
+
+POPD
+
+SET ETTENTION_GENERATOR=
+SET ETTENTION_PLATFORM=
+
+Echo ...done.

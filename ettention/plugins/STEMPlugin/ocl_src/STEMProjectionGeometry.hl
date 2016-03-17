@@ -1,0 +1,42 @@
+#ifndef CONVERGENT_BEAMS_PARAMETER_CL
+#define CONVERGENT_BEAMS_PARAMETER_CL
+
+typedef struct
+{
+    float4 ray;
+    float4 invRay;
+
+    float4 source;
+    float4 detector;
+    float4 horizontalPitch;
+    float4 verticalPitch;
+
+	float openingHalfAngle;
+	float openingHalfAngleTangens;
+	float focalDistance;
+	float focalDifferenceBetweenImages;
+
+    float rayVoxelIntersectionLength;
+} STEMProjectionGeometry;
+
+/*
+void printSTEMProjectionGeometry(const unsigned int x, const unsigned int y, __constant STEMProjectionGeometry* geometry) 
+{
+    if ( x == 0 && y == 0 )
+    {
+        printf("ray direction                   %.4f %.4f %.4f  \n", geometry->ray.x,                    geometry->ray.y,                    geometry->ray.z     );
+        printf("source position                 %.4f %.4f %.4f  \n", geometry->source.x,                 geometry->source.y,                 geometry->source.z  );
+        printf("detector position               %.4f %.4f %.4f  \n", geometry->detector.x,               geometry->detector.y,               geometry->detector.z);
+        printf("Horizontal Pitch                %.4f %.4f %.4f  \n", geometry->horizontalPitch.x,        geometry->horizontalPitch.y,        geometry->horizontalPitch.z  );
+        printf("Vertical Pitch                  %.4f %.4f %.4f  \n", geometry->verticalPitch.x,          geometry->verticalPitch.y,          geometry->verticalPitch.z  );
+		printf("openingHalfAngle				%.4f \n", geometry->openingHalfAngle);
+		printf("openingHalfAngleTangens			%.4f \n", geometry->openingHalfAngleTangens);
+		printf("focalDistance					%.4f \n", geometry->focalDistance);
+		printf("focalDifferenceBetweenImages	%.4f \n", geometry->focalDifferenceBetweenImages);
+		printf("rayVoxelIntersectionLength		%.4f \n", geometry->rayVoxelIntersectionLength);
+        printf("\n");
+    }
+}
+*/
+
+#endif

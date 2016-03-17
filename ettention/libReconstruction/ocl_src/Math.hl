@@ -1,0 +1,18 @@
+#ifndef MATH_HL
+#define MATH_HL
+
+#define EPSILON 1e-4f
+#define WEAK_EPSILON 1e-2f
+#define THE_ANSWER_TO_THE_ULTIMATE_QUESTION_OF_LIFE 42.0f
+
+uint Flatten3D(uint3 index, uint3 size)
+{
+    return index.z * size.y * size.x + index.y * size.x + index.x;
+}
+
+uint Flatten2D(uint2 index, uint2 size)
+{
+    return index.y * size.x + index.x;
+}
+
+#endif

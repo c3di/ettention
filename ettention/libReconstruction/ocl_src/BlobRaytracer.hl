@@ -1,0 +1,118 @@
+#ifndef BLOBRAYTRACER_HL
+#define BLOBRAYTRACER_HL
+
+#define SQRT2 1.415f
+
+float SampleBlob(__local float* blobSampler, uint blobSampleCount, float t)
+{
+    const float coord = clamp(t, 0.0f, 1.0f) * (float)(blobSampleCount - 1);
+    const uint leftCoord = (uint)floor(coord);
+    const float leftVal = blobSampler[leftCoord];
+    const float rightVal = blobSampler[min(blobSampleCount - 1, leftCoord + 1)];
+    return mix(leftVal, rightVal, coord - (float)leftCoord);
+}
+
+float SampleBlobFromGlobal(__global float* blobSampler, uint blobSampleCount, float t)
+{
+    const float coord = clamp(t, 0.0f, 1.0f) * (float)(blobSampleCount - 1);
+    const uint leftCoord = (uint)floor(coord);
+    const float leftVal = blobSampler[leftCoord];
+    const float rightVal = blobSampler[min(blobSampleCount - 1, leftCoord + 1)];
+    return mix(leftVal, rightVal, coord - (float)leftCoord);
+}
+
+float2 BlobTraverseRay(TYPE_3D_READONLY(volume),
+                       __global float* traversalLength,
+                       __local float* blobSampler,
+                       uint blobSampleCount,
+                       float4 source,  // ray start point
+                       float4 ray,     // NORMALIZED (!) ray direction
+                       float4 bBoxMin,
+                       float4 bBoxMax,
+                       float4 bBoxMinComplete,
+                       float4 bBoxMaxComplete,
+                       float blobRadius,
+                       float4 voxelSize,
+                       int4 volumeResolution)
+{
+    const float4 baseVoxelCenter = bBoxMin + 0.5f * voxelSize;
+
+    // slice stepping approach
+    const int gridRadius = ceil(SQRT2 * blobRadius / voxelSize.x); // educated guess
+    const float4 tMin = (bBoxMin + 0.5f * voxelSize - source) / ray;
+    const float4 tMax = (bBoxMax - 0.5f * voxelSize - source) / ray;
+
+    const float4 absRayDir = fabs(ray);
+    float4 pointOnRay = source;
+    float4 rayStep = 0.0f;
+    int4 deltaGridCoordsX = 0;
+    int4 deltaGridCoordsY = 0;
+    int type = 0;
+    int sliceCount;
+    if(absRayDir.x >= max(absRayDir.y, absRayDir.z))
+    {
+        // yz-slice along x-axis
+        pointOnRay += tMin.x * ray;
+        rayStep = ray / ray.x * voxelSize;
+        deltaGridCoordsX.y = 1;
+        deltaGridCoordsY.z = 1;
+        sliceCount = volumeResolution.x;
+    }
+    else if(absRayDir.y >= max(absRayDir.x, absRayDir.z))
+    {
+        // xz-slice along y-axis
+        pointOnRay += tMin.y * ray;
+        rayStep = ray / ray.y * voxelSize;
+        deltaGridCoordsX.z = 1;
+        deltaGridCoordsY.x = 1;
+        sliceCount = volumeResolution.y;
+    }
+    else
+    {
+        // xy-slice along z-axis
+        pointOnRay += tMin.z * ray;
+        rayStep = ray / ray.z * voxelSize;
+        deltaGridCoordsX.x = 1;
+        deltaGridCoordsY.y = 1;
+        sliceCount = volumeResolution.z;
+    }
+
+    const float blobRadiusSquared = blobRadius * blobRadius;
+    float val = 0.0f;
+    float traversalLengthVal = 0.0f;
+    for(uint slice = 0; slice < sliceCount; ++slice)
+    {
+        // coordinates of base pierced voxel
+        const int4 baseGridCoords = convert_int4(floor((pointOnRay - bBoxMin) / voxelSize));
+        // slice marching
+        for(int dy = -gridRadius; dy <= gridRadius; ++dy)
+        {
+            for(int dx = -gridRadius; dx <= gridRadius; ++dx)
+            {
+                // voxel of slice
+                const int4 gridCoords = baseGridCoords + dx * deltaGridCoordsX + dy * deltaGridCoordsY;
+                if(all(gridCoords >= 0) && all(gridCoords.xyz < volumeResolution.xyz))
+                {
+                    // contribution of blob
+                    const float4 blobCenter = (float4)((bBoxMin + 0.5f * voxelSize + convert_float4(gridCoords) * voxelSize).xyz, 0.0f);
+                    const float t = -dot(source.xyz - blobCenter.xyz, ray.xyz);
+                    const float4 blobCenterToRay = (float4)(source.xyz + t * ray.xyz - blobCenter.xyz, 0.0f);
+                    const float blobCenterToRayLengthSquared = dot(blobCenterToRay, blobCenterToRay);
+                    if(blobCenterToRayLengthSquared < blobRadiusSquared)
+                    {
+                        const float blobCenterToRayLength = sqrt(blobCenterToRayLengthSquared);
+
+                        float4 volumeCoordinate = convert_float4(gridCoords) + (float4)(0.5f, 0.5f, 0.5f, 0.5f);
+                        float weighting = SampleBlob(blobSampler, blobSampleCount, blobCenterToRayLength / blobRadius);
+                        val += weighting * READ_3D_READONLY(volume, volumeCoordinate);
+                        traversalLengthVal += weighting;
+                    }
+                }
+            }
+        }
+        pointOnRay += rayStep;
+    }
+    return (float2)(val, traversalLengthVal);
+}
+
+#endif

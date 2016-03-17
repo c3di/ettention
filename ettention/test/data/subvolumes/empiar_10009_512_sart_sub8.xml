@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+	<subVolumeCount value="8" />
+</hardware>
+
+<basisFunctions type="string" value="voxels" />
+
+<algorithm value="sart">
+	<numberOfIterations value="4" />
+	<useLongObjectCompensation value="true"/>
+	<lambda value="0.1" />
+</algorithm>
+
+<input>
+	<projections value="../empiar_10009/empiar_10009_512.mrc"/>
+	<tiltAngles value="../empiar_10009/empiar_10009_512.tlt" />
+</input>
+
+<output>
+	<filename value="../../work/subvolumes/empiar_sart_sub8.mrc"/>
+	<volumeFormat value="mrc"/>
+	<options>
+		<voxelType value="unsigned8"/>
+		<orientation value="xyz_order" />
+	</options>
+</output>
+
+<volume>
+	<dimension value="512 512 256"/>
+	<initValue value="0.0" />
+</volume>
+
+<projectionIteration value="random" />
+
+<debug>
+	<profilingLevel value="none"/> 
+	<writeProjections value="false" />
+	<writeResiduals value="false" />
+	<writeVirtualProjections value="false" />
+	<writeIntermediateVolumes value="false" />
+	<logProgressInfo value="false" />
+	<performanceReportFile value="../../work/subvolumes/performance8.csv" />
+</debug>
+
+<forwardProjection>
+	<samples value="1" />
+</forwardProjection>
+
+<backProjection>
+	<samples value="1" />
+</backProjection>

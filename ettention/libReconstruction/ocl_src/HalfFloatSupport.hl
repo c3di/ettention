@@ -1,0 +1,16 @@
+#ifndef HALF_FLOAT_SUPPORT_CL
+#define HALF_FLOAT_SUPPORT_CL
+
+#ifdef HALF_FLOAT_16 
+    #define TYPE_3D_READWRITE(data)                __global half* data
+    #define READ_3D_READWRITE(data,index)          vload_half(index, data)
+    #define WRITE_3D_READWRITE(data,index,value)   vstore_half(value, index, data)
+#endif 
+
+#ifdef FLOAT_32 
+    #define TYPE_3D_READWRITE(data)                __global float* data
+    #define READ_3D_READWRITE(data,index)          data[index]
+    #define WRITE_3D_READWRITE(data,index,value)   data[index] = value
+#endif
+
+#endif
