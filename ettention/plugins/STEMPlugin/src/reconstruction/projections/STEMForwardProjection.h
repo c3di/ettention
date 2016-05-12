@@ -13,21 +13,21 @@ namespace ettention
 
     namespace stem
     {
-		class STEMScannerGeometry;
+        class STEMScannerGeometry;
 
-		class PLUGIN_API STEMForwardProjectionKernel : public ForwardProjectionKernel
+        class PLUGIN_API STEMForwardProjectionKernel : public ForwardProjectionKernel
         {
         public:
-            STEMForwardProjectionKernel(Framework* framework, 
-										const Vec2ui& projectionResolution, 
-										GeometricSetup* geometricSetup, 
-										const Vec3f& unrotatedSourceBase, 
-										GPUMappedVolume* volume,
-										GPUMappedVolume* priorKnowledgeMask,
-										int samplesPerBeam);
+            STEMForwardProjectionKernel(Framework* framework,
+                                        const Vec2ui& projectionResolution,
+                                        GeometricSetup* geometricSetup,
+                                        const Vec3f& unrotatedSourceBase,
+                                        GPUMappedVolume* volume,
+                                        GPUMappedVolume* priorKnowledgeMask,
+                                        int samplesPerBeam);
             virtual ~STEMForwardProjectionKernel();
 
-			void setScannerGeometry(STEMScannerGeometry* geometry);
+            void setScannerGeometry(STEMScannerGeometry* geometry);
 
         protected:
             void prepareKernelArguments() override;
@@ -36,7 +36,7 @@ namespace ettention
             void allocateRandomBuffer();
 
             Vec3f unrotatedSourceBase;
-			STEMScannerGeometry* geometry;
+            STEMScannerGeometry* geometry;
             GPUMappedVector* randomSamples;
         };
     }

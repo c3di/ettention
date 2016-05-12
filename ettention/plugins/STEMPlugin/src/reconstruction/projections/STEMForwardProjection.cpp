@@ -24,17 +24,23 @@ namespace ettention
                                                                  int samplesPerBeam)
             : ForwardProjectionKernel(framework, Convergent_Beams_Forwardprojection_kernel_SourceCode, "execute", "STEMForwardProjectionKernel", geometricSetup, volume, priorKnowledgeMask, samplesPerBeam)
             , unrotatedSourceBase(unrotatedSourceBase)
+            , randomSamples(nullptr)
+            , geometry(nullptr)
         {
             allocateRandomBuffer();
         }
 
         STEMForwardProjectionKernel::~STEMForwardProjectionKernel()
         {
+            delete geometry;
             delete randomSamples;
         }
 
         void STEMForwardProjectionKernel::setScannerGeometry(STEMScannerGeometry* geometry)
         {
+            if( this->geometry )
+                delete this->geometry;
+
             this->geometry = (STEMScannerGeometry*) geometry->clone();
             float focalDistance = geometry->getFocalDepth() - unrotatedSourceBase.z;
             this->geometry->setFocalDepth(focalDistance);
