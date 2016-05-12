@@ -67,6 +67,7 @@ public:
 
         plugin = new STEMPlugin();
         framework->getPluginManager()->registerPlugin(plugin);
+        framework->getImageStackDataSourceFactory()->addDataSourcePrototype(20, new TF_Datasource());
     }
 
     virtual void TearDown()
@@ -232,7 +233,7 @@ TEST_F(STEMPluginTest, AdjointBackProjectionKernelZ)
     GPUMapped<Image>* prefilteredResidual = new GPUMapped<Image>(framework->getOpenCLStack(), image);
     
     float tiltAngle = 0.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     prefilteredResidual->ensureIsUpToDateOnGPU();
@@ -261,7 +262,7 @@ TEST_F(STEMPluginTest, AdjointBackProjectionOperatorZ_OneSubvolume)
     residual->takeOwnershipOfObjectOnCPU();
 
     float tiltAngle = 0.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     Adjoint_BackProjectionOperator* adjointOperator = new Adjoint_BackProjectionOperator(framework, geometricSetup, mappedVolume, residual, 1.0f);
@@ -289,7 +290,7 @@ TEST_F(STEMPluginTest, AdjointBackProjectionOperatorZ_TwoSubvolume)
     residual->takeOwnershipOfObjectOnCPU();
 
     float tiltAngle = 0.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     Adjoint_BackProjectionOperator* adjointOperator = new Adjoint_BackProjectionOperator(framework, geometricSetup, mappedVolume, residual, 1.0f);
@@ -314,7 +315,7 @@ TEST_F(STEMPluginTest, RegularizationBackProjectionKernelZ)
     residual->takeOwnershipOfObjectOnCPU();
 
     float tiltAngle = 0.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     RegularizationBackProjectionKernel* backProjection = new RegularizationBackProjectionKernel(framework, geometricSetup, residual, computeRayLength->getOutput(), mappedVolume->getMappedSubVolume(), 1.0f, false);
@@ -341,7 +342,7 @@ TEST_F(STEMPluginTest, RegularizationBackProjectionOperatorZ_OneSubvolume)
     residual = new GPUMapped<Image>(framework->getOpenCLStack(), ImageDeserializer::readImage(testdataDirectory + "regularization/projection_z.tif"));
     residual->takeOwnershipOfObjectOnCPU();
     float tiltAngle = 0.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     Regularization_BackProjectionOperator* regularizationOperator = new Regularization_BackProjectionOperator(framework, geometricSetup, mappedVolume, residual, 1.0f);
@@ -369,7 +370,7 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_Kernel)
     forwardKernel->setOutput(virtualProjection, rayLengthImage);
 
     float tiltAngle = 10.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     rotatedGeometry->setFocalDepth(0.0f);
     rotatedGeometry->setTiltAngle(tiltAngle);
     rotatedGeometry->setFocalDifferenceBetweenImages(64.0f);
@@ -379,10 +380,10 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_Kernel)
 
     ImageSerializer::writeImage(workDirectory + "forward/projection", forwardKernel->getVirtualProjection(), ImageSerializer::TIFF_GRAY_32);
 
-    ettention::ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection.tif", testdataDirectory + "forward/projection_reference.tif");
-
     delete forwardKernel;
     delete mappedVolume;
+
+    ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection.tif", testdataDirectory + "forward/projection_reference.tif");
 }
 
 TEST_F(STEMPluginTest, STEM_Forward_Projection_FocalDistance)
@@ -395,7 +396,7 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_FocalDistance)
     forwardKernel->setOutput(virtualProjection, rayLengthImage);
 
     float tiltAngle = 10.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     forwardKernel->getVirtualProjection()->getBufferOnGPU()->clear();
@@ -410,10 +411,11 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_FocalDistance)
     forwardKernel->getTraversalLength()->getBufferOnGPU()->clear();
     forwardKernel->run();
     ImageSerializer::writeImage(workDirectory + "forward/projection_focus_32", forwardKernel->getVirtualProjection(), ImageSerializer::TIFF_GRAY_32);
-    ettention::ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection_focus_32.tif", testdataDirectory + "forward/projection_reference_32.tif");
 
     delete forwardKernel;
     delete mappedVolume;
+
+    ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection_focus_32.tif", testdataDirectory + "forward/projection_reference_32.tif");
 }
 
 TEST_F(STEMPluginTest, STEM_Forward_Projection_Operator_One_SubVolumes)
@@ -426,7 +428,7 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_Operator_One_SubVolumes)
     forwardOperator->setOutput(virtualProjection, rayLengthImage);
 
     float tiltAngle = 10.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     forwardOperator->run();
@@ -434,10 +436,10 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_Operator_One_SubVolumes)
     forwardOperator->getVirtualProjection()->ensureIsUpToDateOnCPU();
     ImageSerializer::writeImage(workDirectory + "forward/projection_1_subvolumes", forwardOperator->getVirtualProjection(), ImageSerializer::TIFF_GRAY_32);
 
-    ettention::ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection_1_subvolumes.tif", testdataDirectory + "forward/projection_reference.tif");
-
     delete forwardOperator;
     delete mappedVolume;
+
+    ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection_1_subvolumes.tif", testdataDirectory + "forward/projection_reference.tif");
 }
 
 TEST_F(STEMPluginTest, STEM_Forward_Projection_Operator_Two_SubVolumes)
@@ -451,7 +453,7 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_Operator_Two_SubVolumes)
     forwardOperator->setOutput(virtualProjection, rayLengthImage);
 
     float tiltAngle = 10.0f;
-    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->getRotatedScannerGeometry(tiltAngle));
+    STEMScannerGeometry* rotatedGeometry = dynamic_cast<STEMScannerGeometry*>(satRotator->createRotatedScannerGeometry(tiltAngle));
     geometricSetup->setScannerGeometry(rotatedGeometry);
 
     // forwardOperator->setProjectionProperties(projectionProps);
@@ -460,20 +462,19 @@ TEST_F(STEMPluginTest, STEM_Forward_Projection_Operator_Two_SubVolumes)
     forwardOperator->getVirtualProjection()->ensureIsUpToDateOnCPU();
     ImageSerializer::writeImage(workDirectory + "forward/projection_2_subvolumes", forwardOperator->getVirtualProjection(), ImageSerializer::TIFF_GRAY_32);
 
-    ettention::ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection_2_subvolumes.tif", testdataDirectory + "forward/projection_reference.tif");
-
     delete forwardOperator;
     delete mappedVolume;
+
+    ImageComparator::assertImagesAreEqual(workDirectory + "forward/projection_2_subvolumes.tif", testdataDirectory + "forward/projection_reference.tif");
 }
 
 TEST_F(STEMPluginTest, TF_ART_TEST_Regularization)
 {
     delete geometricSetup->getVolume();
     geometricSetup->setVolume(new FloatVolume(volumeOptions.getResolution(), 1.0f, 1));
-    framework->getImageStackDataSourceFactory()->addDataSourcePrototype(20, new TF_Datasource());
 
     XMLParameterSource* xmlParameter = new XMLParameterSource(testdataDirectory + "tf_art/regularization.xml");
-    framework->parseAndAddParameterSource(xmlParameter);
+    framework->resetParameterSource(xmlParameter);
 
     TF_ART application(framework);
     application.run();
@@ -484,10 +485,9 @@ TEST_F(STEMPluginTest, TF_ART_TEST_Adjoint)
 {
     delete geometricSetup->getVolume();
     geometricSetup->setVolume(new FloatVolume(volumeOptions.getResolution(), 1.0f, 1));
-    framework->getImageStackDataSourceFactory()->addDataSourcePrototype(20, new TF_Datasource());
 
     XMLParameterSource* xmlParameter = new XMLParameterSource(testdataDirectory + "tf_art/adjoint.xml");
-    framework->parseAndAddParameterSource(xmlParameter);
+    framework->resetParameterSource(xmlParameter);
 
     TF_ART application(framework);
     application.run();
