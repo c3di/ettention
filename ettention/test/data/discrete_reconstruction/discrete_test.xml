@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+	<subVolumeCount value="1" />
+</hardware>
+
+<algorithm value="sart" >
+	<numberOfIterations value="1" />
+	<useLongObjectCompensation value="true"/>
+	<lambda value="0.3" />
+	<discreteReconstruction value="dart" >
+		<threshold value="0.5" />
+	</discreteReconstruction>
+</algorithm>
+
+<input>
+	<projections value="empiar_10009_512.mrc" />
+	<tiltAngles value="empiar_10009_512.tlt" />
+</input>
+
+<output>
+	<filename value="empiar_sart_discrete.mrc" />
+	<options>
+		<voxelType value="float32" />
+		<orientation value="xyz_order" />
+	</options>
+</output>
+
+<volume>
+	<dimension value="512 512 256"/>
+	<initValue value="0.0" />
+</volume>
+
+<debug>
+	<outputKernelParameters value="false"/>
+	<writeProjections value="false"/>
+	<writeVirtualProjections value="false"/>
+	<writeResiduals value="false"/>
+	<writeIntermediateVolumes value="false"/>
+	<writeIntermediateVolumesAfterIterations value="false"/>
+	<IMODCompliantLogging value="false"/>
+</debug>

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+	<subVolumeCount value="1" />
+</hardware>
+
+
+<algorithm value="sart">
+	<blockSize value="5" />
+	<numberOfIterations value="1" />
+	<useLongObjectCompensation value="true"/>
+	<lambda value="0.1" />
+	<basisFunctions type="string" value="voxels" />
+</algorithm>
+
+<input>
+	<projections value="empiar_10009_64.mrc"/>
+	<tiltAngles value="empiar_10009.tlt" />
+</input>
+
+<output>
+	<filename value="../../work/volume/empiar_10009_64_dimension.mrc"/>
+	<volumeFormat value="mrc"/>
+	<options>
+		<voxelType value="unsigned8"/>
+		<orientation value="xyz_order" />
+	</options>
+</output>
+
+<volume>
+	<dimension value="100 100 100"/>
+	<initValue value="0.0" />
+</volume>
+
+<optimization>
+	<projectionIteration value="random" />
+</optimization>
+
+<debug>
+	<profilingLevel value="overall"/> 
+	<writeProjections value="false" />
+	<writeResiduals value="false" />
+	<writeVirtualProjections value="false" />
+	<writeIntermediateVolumes value="false" />
+	<logProgressInfo value="false" />
+</debug>
+
+<forwardProjection>
+	<samples value="1" />
+</forwardProjection>
+
+<backProjection>
+	<samples value="1" />
+</backProjection>

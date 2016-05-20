@@ -1,0 +1,51 @@
+#ifndef RAYUTILS_HL
+#define RAYUTILS_HL
+#include "VolumeGeometry.hl"
+#include "ProjectionGeometry.hl"
+#include "Math.hl"
+
+float2 getBoundingBoxEntryAndExitPointInRayCoordinates(const float4 bBoxMin, const float4 bBoxMax, const float4 source, const float4 invRay) 
+{
+    const float4 t0 = (bBoxMin - source) * invRay;
+    const float4 t1 = (bBoxMax - source) * invRay;
+            
+    const float4 tmin = fmin(t0, t1);
+    const float4 tmax = fmax(t0, t1);
+
+    return (float2)(fmax(fmax(tmin.x, tmin.y),tmin.z), fmin(fmin(tmax.x, tmax.y),tmax.z));
+}
+
+
+bool doesRayIntersectBoundingBox(float t_in, float t_out) 
+{
+    return (t_out - t_in > EPSILON);
+}
+
+
+float4 invertVectorSafely(float4 vector) 
+{
+    float4 inverted = (float4)(1.0f,1.0f,1.0f,1.0f) / vector;
+    if (vector.x == 0.0f)
+        inverted.x = -FLT_MAX;
+    if (vector.y == 0.0f)
+        inverted.y = -FLT_MAX;
+    if (vector.z == 0.0f)
+        inverted.z = -FLT_MAX;
+    return inverted;
+}
+
+float4 getRayPosition(float4 basePos,
+                      unsigned int x,
+                      unsigned int y,
+                      float4 hPitch,
+                      float4 vPitch,
+                      uint2 sampleIndex,
+                      uint samplesPerDirection)
+{
+    float denumerator = 2.0f * (float)samplesPerDirection;
+    float2 nominator = 2.0f * convert_float2(sampleIndex) + 1.0f;
+    float2 coordsInPixel = nominator / denumerator;
+    return basePos + ((float)x + coordsInPixel.x) * hPitch + ((float)y + coordsInPixel.y) * vPitch;
+}
+
+#endif

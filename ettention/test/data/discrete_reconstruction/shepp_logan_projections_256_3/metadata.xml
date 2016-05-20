@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="utf-8"?>
+<geometry>
+    <detectorPosition value="-256 -256 1024"/>
+    <sourcePosition value="-256 -256 -1024"/>
+    <horizontalPitch value="8 0 0"/>
+    <verticalPitch value="0 8 0"/>
+    <volumeDimensions value="512 512 512"/>
+</geometry>
+<projection>
+    <image filename="projection_0.tif"/>
+    <tiltAngle value="-90"/>
+</projection>
+<projection>
+    <image filename="projection_1.tif"/>
+    <tiltAngle value="-89"/>
+</projection>
+<projection>
+    <image filename="projection_2.tif"/>
+    <tiltAngle value="-88"/>
+</projection>
+<projection>
+    <image filename="projection_3.tif"/>
+    <tiltAngle value="-87"/>
+</projection>
+<projection>
+    <image filename="projection_4.tif"/>
+    <tiltAngle value="-86"/>
+</projection>
+<projection>
+    <image filename="projection_5.tif"/>
+    <tiltAngle value="-85"/>
+</projection>
+<projection>
+    <image filename="projection_6.tif"/>
+    <tiltAngle value="-84"/>
+</projection>
+<projection>
+    <image filename="projection_7.tif"/>
+    <tiltAngle value="-83"/>
+</projection>
+<projection>
+    <image filename="projection_8.tif"/>
+    <tiltAngle value="-82"/>
+</projection>
+<projection>
+    <image filename="projection_9.tif"/>
+    <tiltAngle value="-81"/>
+</projection>
+<projection>
+    <image filename="projection_10.tif"/>
+    <tiltAngle value="-80"/>
+</projection>
+<projection>
+    <image filename="projection_11.tif"/>
+    <tiltAngle value="-79"/>
+</projection>
+<projection>
+    <image filename="projection_12.tif"/>
+    <tiltAngle value="-78"/>
+</projection>
+<projection>
+    <image filename="projection_13.tif"/>
+    <tiltAngle value="-77"/>
+</projection>
+<projection>
+    <image filename="projection_14.tif"/>
+    <tiltAngle value="-76"/>
+</projection>
+<projection>
+    <image filename="projection_15.tif"/>
+    <tiltAngle value="-75"/>
+</projection>
+<projection>
+    <image filename="projection_16.tif"/>
+    <tiltAngle value="-74"/>
+</projection>
+<projection>
+    <image filename="projection_17.tif"/>
+    <tiltAngle value="-73"/>
+</projection>
+<projection>
+    <image filename="projection_18.tif"/>
+    <tiltAngle value="-72"/>
+</projection>
+<projection>
+    <image filename="projection_19.tif"/>
+    <tiltAngle value="-71"/>
+</projection>
+<projection>
+    <image filename="projection_20.tif"/>
+    <tiltAngle value="-70"/>
+</projection>
+<projection>
+    <image filename="projection_21.tif"/>
+    <tiltAngle value="-69"/>
+</projection>
+<projection>
+    <image filename="projection_22.tif"/>
+    <tiltAngle value="-68"/>
+</projection>
+<projection>
+    <image filename="projection_23.tif"/>
+    <tiltAngle value="-67"/>
+</projection>
+<projection>
+    <image filename="projection_24.tif"/>
+    <tiltAngle value="-66"/>
+</projection>
+<projection>
+    <image filename="projection_25.tif"/>
+    <tiltAngle value="-65"/>
+</projection>
+<projection>
+    <image filename="projection_26.tif"/>
+    <tiltAngle value="-64"/>
+</projection>
+<projection>
+    <image filename="projection_27.tif"/>
+    <tiltAngle value="-63"/>
+</projection>
+<projection>
+    <image filename="projection_28.tif"/>
+    <tiltAngle value="-62"/>
+</projection>
+<projection>
+    <image filename="projection_29.tif"/>
+    <tiltAngle value="-61"/>
+</projection>
+<projection>
+    <image filename="projection_30.tif"/>
+    <tiltAngle value="-60"/>
+</projection>
+<projection>
+    <image filename="projection_31.tif"/>
+    <tiltAngle value="-59"/>
+</projection>
+<projection>
+    <image filename="projection_32.tif"/>
+    <tiltAngle value="-58"/>
+</projection>
+<projection>
+    <image filename="projection_33.tif"/>
+    <tiltAngle value="-57"/>
+</projection>
+<projection>
+    <image filename="projection_34.tif"/>
+    <tiltAngle value="-56"/>
+</projection>
+<projection>
+    <image filename="projection_35.tif"/>
+    <tiltAngle value="-55"/>
+</projection>
+<projection>
+    <image filename="projection_36.tif"/>
+    <tiltAngle value="-54"/>
+</projection>
+<projection>
+    <image filename="projection_37.tif"/>
+    <tiltAngle value="-53"/>
+</projection>
+<projection>
+    <image filename="projection_38.tif"/>
+    <tiltAngle value="-52"/>
+</projection>
+<projection>
+    <image filename="projection_39.tif"/>
+    <tiltAngle value="-51"/>
+</projection>
+<projection>
+    <image filename="projection_40.tif"/>
+    <tiltAngle value="-50"/>
+</projection>
+<projection>
+    <image filename="projection_41.tif"/>
+    <tiltAngle value="-49"/>
+</projection>
+<projection>
+    <image filename="projection_42.tif"/>
+    <tiltAngle value="-48"/>
+</projection>
+<projection>
+    <image filename="projection_43.tif"/>
+    <tiltAngle value="-47"/>
+</projection>
+<projection>
+    <image filename="projection_44.tif"/>
+    <tiltAngle value="-46"/>
+</projection>
+<projection>
+    <image filename="projection_45.tif"/>
+    <tiltAngle value="-45"/>
+</projection>
+<projection>
+    <image filename="projection_46.tif"/>
+    <tiltAngle value="-44"/>
+</projection>
+<projection>
+    <image filename="projection_47.tif"/>
+    <tiltAngle value="-43"/>
+</projection>
+<projection>
+    <image filename="projection_48.tif"/>
+    <tiltAngle value="-42"/>
+</projection>
+<projection>
+    <image filename="projection_49.tif"/>
+    <tiltAngle value="-41"/>
+</projection>
+<projection>
+    <image filename="projection_50.tif"/>
+    <tiltAngle value="-40"/>
+</projection>
+<projection>
+    <image filename="projection_51.tif"/>
+    <tiltAngle value="-39"/>
+</projection>
+<projection>
+    <image filename="projection_52.tif"/>
+    <tiltAngle value="-38"/>
+</projection>
+<projection>
+    <image filename="projection_53.tif"/>
+    <tiltAngle value="-37"/>
+</projection>
+<projection>
+    <image filename="projection_54.tif"/>
+    <tiltAngle value="-36"/>
+</projection>
+<projection>
+    <image filename="projection_55.tif"/>
+    <tiltAngle value="-35"/>
+</projection>
+<projection>
+    <image filename="projection_56.tif"/>
+    <tiltAngle value="-34"/>
+</projection>
+<projection>
+    <image filename="projection_57.tif"/>
+    <tiltAngle value="-33"/>
+</projection>
+<projection>
+    <image filename="projection_58.tif"/>
+    <tiltAngle value="-32"/>
+</projection>
+<projection>
+    <image filename="projection_59.tif"/>
+    <tiltAngle value="-31"/>
+</projection>
+<projection>
+    <image filename="projection_60.tif"/>
+    <tiltAngle value="-30"/>
+</projection>
+<projection>
+    <image filename="projection_61.tif"/>
+    <tiltAngle value="-29"/>
+</projection>
+<projection>
+    <image filename="projection_62.tif"/>
+    <tiltAngle value="-28"/>
+</projection>
+<projection>
+    <image filename="projection_63.tif"/>
+    <tiltAngle value="-27"/>
+</projection>
+<projection>
+    <image filename="projection_64.tif"/>
+    <tiltAngle value="-26"/>
+</projection>
+<projection>
+    <image filename="projection_65.tif"/>
+    <tiltAngle value="-25"/>
+</projection>
+<projection>
+    <image filename="projection_66.tif"/>
+    <tiltAngle value="-24"/>
+</projection>
+<projection>
+    <image filename="projection_67.tif"/>
+    <tiltAngle value="-23"/>
+</projection>
+<projection>
+    <image filename="projection_68.tif"/>
+    <tiltAngle value="-22"/>
+</projection>
+<projection>
+    <image filename="projection_69.tif"/>
+    <tiltAngle value="-21"/>
+</projection>
+<projection>
+    <image filename="projection_70.tif"/>
+    <tiltAngle value="-20"/>
+</projection>
+<projection>
+    <image filename="projection_71.tif"/>
+    <tiltAngle value="-19"/>
+</projection>
+<projection>
+    <image filename="projection_72.tif"/>
+    <tiltAngle value="-18"/>
+</projection>
+<projection>
+    <image filename="projection_73.tif"/>
+    <tiltAngle value="-17"/>
+</projection>
+<projection>
+    <image filename="projection_74.tif"/>
+    <tiltAngle value="-16"/>
+</projection>
+<projection>
+    <image filename="projection_75.tif"/>
+    <tiltAngle value="-15"/>
+</projection>
+<projection>
+    <image filename="projection_76.tif"/>
+    <tiltAngle value="-14"/>
+</projection>
+<projection>
+    <image filename="projection_77.tif"/>
+    <tiltAngle value="-13"/>
+</projection>
+<projection>
+    <image filename="projection_78.tif"/>
+    <tiltAngle value="-12"/>
+</projection>
+<projection>
+    <image filename="projection_79.tif"/>
+    <tiltAngle value="-11"/>
+</projection>
+<projection>
+    <image filename="projection_80.tif"/>
+    <tiltAngle value="-10"/>
+</projection>
+<projection>
+    <image filename="projection_81.tif"/>
+    <tiltAngle value="-9"/>
+</projection>
+<projection>
+    <image filename="projection_82.tif"/>
+    <tiltAngle value="-8"/>
+</projection>
+<projection>
+    <image filename="projection_83.tif"/>
+    <tiltAngle value="-7"/>
+</projection>
+<projection>
+    <image filename="projection_84.tif"/>
+    <tiltAngle value="-6"/>
+</projection>
+<projection>
+    <image filename="projection_85.tif"/>
+    <tiltAngle value="-5"/>
+</projection>
+<projection>
+    <image filename="projection_86.tif"/>
+    <tiltAngle value="-4"/>
+</projection>
+<projection>
+    <image filename="projection_87.tif"/>
+    <tiltAngle value="-3"/>
+</projection>
+<projection>
+    <image filename="projection_88.tif"/>
+    <tiltAngle value="-2"/>
+</projection>
+<projection>
+    <image filename="projection_89.tif"/>
+    <tiltAngle value="-1"/>
+</projection>
+<projection>
+    <image filename="projection_90.tif"/>
+    <tiltAngle value="0"/>
+</projection>
+<projection>
+    <image filename="projection_91.tif"/>
+    <tiltAngle value="1"/>
+</projection>
+<projection>
+    <image filename="projection_92.tif"/>
+    <tiltAngle value="2"/>
+</projection>
+<projection>
+    <image filename="projection_93.tif"/>
+    <tiltAngle value="3"/>
+</projection>
+<projection>
+    <image filename="projection_94.tif"/>
+    <tiltAngle value="4"/>
+</projection>
+<projection>
+    <image filename="projection_95.tif"/>
+    <tiltAngle value="5"/>
+</projection>
+<projection>
+    <image filename="projection_96.tif"/>
+    <tiltAngle value="6"/>
+</projection>
+<projection>
+    <image filename="projection_97.tif"/>
+    <tiltAngle value="7"/>
+</projection>
+<projection>
+    <image filename="projection_98.tif"/>
+    <tiltAngle value="8"/>
+</projection>
+<projection>
+    <image filename="projection_99.tif"/>
+    <tiltAngle value="9"/>
+</projection>
+<projection>
+    <image filename="projection_100.tif"/>
+    <tiltAngle value="10"/>
+</projection>
+<projection>
+    <image filename="projection_101.tif"/>
+    <tiltAngle value="11"/>
+</projection>
+<projection>
+    <image filename="projection_102.tif"/>
+    <tiltAngle value="12"/>
+</projection>
+<projection>
+    <image filename="projection_103.tif"/>
+    <tiltAngle value="13"/>
+</projection>
+<projection>
+    <image filename="projection_104.tif"/>
+    <tiltAngle value="14"/>
+</projection>
+<projection>
+    <image filename="projection_105.tif"/>
+    <tiltAngle value="15"/>
+</projection>
+<projection>
+    <image filename="projection_106.tif"/>
+    <tiltAngle value="16"/>
+</projection>
+<projection>
+    <image filename="projection_107.tif"/>
+    <tiltAngle value="17"/>
+</projection>
+<projection>
+    <image filename="projection_108.tif"/>
+    <tiltAngle value="18"/>
+</projection>
+<projection>
+    <image filename="projection_109.tif"/>
+    <tiltAngle value="19"/>
+</projection>
+<projection>
+    <image filename="projection_110.tif"/>
+    <tiltAngle value="20"/>
+</projection>
+<projection>
+    <image filename="projection_111.tif"/>
+    <tiltAngle value="21"/>
+</projection>
+<projection>
+    <image filename="projection_112.tif"/>
+    <tiltAngle value="22"/>
+</projection>
+<projection>
+    <image filename="projection_113.tif"/>
+    <tiltAngle value="23"/>
+</projection>
+<projection>
+    <image filename="projection_114.tif"/>
+    <tiltAngle value="24"/>
+</projection>
+<projection>
+    <image filename="projection_115.tif"/>
+    <tiltAngle value="25"/>
+</projection>
+<projection>
+    <image filename="projection_116.tif"/>
+    <tiltAngle value="26"/>
+</projection>
+<projection>
+    <image filename="projection_117.tif"/>
+    <tiltAngle value="27"/>
+</projection>
+<projection>
+    <image filename="projection_118.tif"/>
+    <tiltAngle value="28"/>
+</projection>
+<projection>
+    <image filename="projection_119.tif"/>
+    <tiltAngle value="29"/>
+</projection>
+<projection>
+    <image filename="projection_120.tif"/>
+    <tiltAngle value="30"/>
+</projection>
+<projection>
+    <image filename="projection_121.tif"/>
+    <tiltAngle value="31"/>
+</projection>
+<projection>
+    <image filename="projection_122.tif"/>
+    <tiltAngle value="32"/>
+</projection>
+<projection>
+    <image filename="projection_123.tif"/>
+    <tiltAngle value="33"/>
+</projection>
+<projection>
+    <image filename="projection_124.tif"/>
+    <tiltAngle value="34"/>
+</projection>
+<projection>
+    <image filename="projection_125.tif"/>
+    <tiltAngle value="35"/>
+</projection>
+<projection>
+    <image filename="projection_126.tif"/>
+    <tiltAngle value="36"/>
+</projection>
+<projection>
+    <image filename="projection_127.tif"/>
+    <tiltAngle value="37"/>
+</projection>
+<projection>
+    <image filename="projection_128.tif"/>
+    <tiltAngle value="38"/>
+</projection>
+<projection>
+    <image filename="projection_129.tif"/>
+    <tiltAngle value="39"/>
+</projection>
+<projection>
+    <image filename="projection_130.tif"/>
+    <tiltAngle value="40"/>
+</projection>
+<projection>
+    <image filename="projection_131.tif"/>
+    <tiltAngle value="41"/>
+</projection>
+<projection>
+    <image filename="projection_132.tif"/>
+    <tiltAngle value="42"/>
+</projection>
+<projection>
+    <image filename="projection_133.tif"/>
+    <tiltAngle value="43"/>
+</projection>
+<projection>
+    <image filename="projection_134.tif"/>
+    <tiltAngle value="44"/>
+</projection>
+<projection>
+    <image filename="projection_135.tif"/>
+    <tiltAngle value="45"/>
+</projection>
+<projection>
+    <image filename="projection_136.tif"/>
+    <tiltAngle value="46"/>
+</projection>
+<projection>
+    <image filename="projection_137.tif"/>
+    <tiltAngle value="47"/>
+</projection>
+<projection>
+    <image filename="projection_138.tif"/>
+    <tiltAngle value="48"/>
+</projection>
+<projection>
+    <image filename="projection_139.tif"/>
+    <tiltAngle value="49"/>
+</projection>
+<projection>
+    <image filename="projection_140.tif"/>
+    <tiltAngle value="50"/>
+</projection>
+<projection>
+    <image filename="projection_141.tif"/>
+    <tiltAngle value="51"/>
+</projection>
+<projection>
+    <image filename="projection_142.tif"/>
+    <tiltAngle value="52"/>
+</projection>
+<projection>
+    <image filename="projection_143.tif"/>
+    <tiltAngle value="53"/>
+</projection>
+<projection>
+    <image filename="projection_144.tif"/>
+    <tiltAngle value="54"/>
+</projection>
+<projection>
+    <image filename="projection_145.tif"/>
+    <tiltAngle value="55"/>
+</projection>
+<projection>
+    <image filename="projection_146.tif"/>
+    <tiltAngle value="56"/>
+</projection>
+<projection>
+    <image filename="projection_147.tif"/>
+    <tiltAngle value="57"/>
+</projection>
+<projection>
+    <image filename="projection_148.tif"/>
+    <tiltAngle value="58"/>
+</projection>
+<projection>
+    <image filename="projection_149.tif"/>
+    <tiltAngle value="59"/>
+</projection>
+<projection>
+    <image filename="projection_150.tif"/>
+    <tiltAngle value="60"/>
+</projection>
+<projection>
+    <image filename="projection_151.tif"/>
+    <tiltAngle value="61"/>
+</projection>
+<projection>
+    <image filename="projection_152.tif"/>
+    <tiltAngle value="62"/>
+</projection>
+<projection>
+    <image filename="projection_153.tif"/>
+    <tiltAngle value="63"/>
+</projection>
+<projection>
+    <image filename="projection_154.tif"/>
+    <tiltAngle value="64"/>
+</projection>
+<projection>
+    <image filename="projection_155.tif"/>
+    <tiltAngle value="65"/>
+</projection>
+<projection>
+    <image filename="projection_156.tif"/>
+    <tiltAngle value="66"/>
+</projection>
+<projection>
+    <image filename="projection_157.tif"/>
+    <tiltAngle value="67"/>
+</projection>
+<projection>
+    <image filename="projection_158.tif"/>
+    <tiltAngle value="68"/>
+</projection>
+<projection>
+    <image filename="projection_159.tif"/>
+    <tiltAngle value="69"/>
+</projection>
+<projection>
+    <image filename="projection_160.tif"/>
+    <tiltAngle value="70"/>
+</projection>
+<projection>
+    <image filename="projection_161.tif"/>
+    <tiltAngle value="71"/>
+</projection>
+<projection>
+    <image filename="projection_162.tif"/>
+    <tiltAngle value="72"/>
+</projection>
+<projection>
+    <image filename="projection_163.tif"/>
+    <tiltAngle value="73"/>
+</projection>
+<projection>
+    <image filename="projection_164.tif"/>
+    <tiltAngle value="74"/>
+</projection>
+<projection>
+    <image filename="projection_165.tif"/>
+    <tiltAngle value="75"/>
+</projection>
+<projection>
+    <image filename="projection_166.tif"/>
+    <tiltAngle value="76"/>
+</projection>
+<projection>
+    <image filename="projection_167.tif"/>
+    <tiltAngle value="77"/>
+</projection>
+<projection>
+    <image filename="projection_168.tif"/>
+    <tiltAngle value="78"/>
+</projection>
+<projection>
+    <image filename="projection_169.tif"/>
+    <tiltAngle value="79"/>
+</projection>
+<projection>
+    <image filename="projection_170.tif"/>
+    <tiltAngle value="80"/>
+</projection>
+<projection>
+    <image filename="projection_171.tif"/>
+    <tiltAngle value="81"/>
+</projection>
+<projection>
+    <image filename="projection_172.tif"/>
+    <tiltAngle value="82"/>
+</projection>
+<projection>
+    <image filename="projection_173.tif"/>
+    <tiltAngle value="83"/>
+</projection>
+<projection>
+    <image filename="projection_174.tif"/>
+    <tiltAngle value="84"/>
+</projection>
+<projection>
+    <image filename="projection_175.tif"/>
+    <tiltAngle value="85"/>
+</projection>
+<projection>
+    <image filename="projection_176.tif"/>
+    <tiltAngle value="86"/>
+</projection>
+<projection>
+    <image filename="projection_177.tif"/>
+    <tiltAngle value="87"/>
+</projection>
+<projection>
+    <image filename="projection_178.tif"/>
+    <tiltAngle value="88"/>
+</projection>
+<projection>
+    <image filename="projection_179.tif"/>
+    <tiltAngle value="89"/>
+</projection>
+<projection>
+    <image filename="projection_180.tif"/>
+    <tiltAngle value="90"/>
+</projection>

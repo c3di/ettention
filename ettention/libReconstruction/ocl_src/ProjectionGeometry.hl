@@ -1,0 +1,33 @@
+#ifndef PROJECTIONGEOMETRY_CL
+#define PROJECTIONGEOMETRY_CL
+
+typedef struct
+{
+    float4 ray;
+    float4 invRay;
+
+    float4 source;
+    float4 detector;
+    float4 horizontalPitch;
+    float4 verticalPitch;
+
+    float rayVoxelIntersectionLength;
+} ProjectionGeometry;
+
+/* The following functions is for debugging purpose only. It should not be used in production code
+   as it only works on intel opencl devices and does not compile on nvidia. 
+void printProjectionGeometry(const unsigned int x, const unsigned int y, __global ProjectionGeometry* geometry) 
+{
+    if (x == 0 && y == 0)
+    {
+        printf("ray direction                   %.4f %.4f %.4f  \n", geometry->c_ray.x,                    geometry->c_ray.y,                    geometry->c_ray.z     );
+        printf("source position                 %.4f %.4f %.4f  \n", geometry->c_source.x,                 geometry->c_source.y,                 geometry->c_source.z  );
+        printf("detector position               %.4f %.4f %.4f  \n", geometry->c_detektor.x,               geometry->c_detektor.y,               geometry->c_detektor.z);
+        printf("Horizontal Pitch                         %.4f %.4f %.4f  \n", geometry->c_HorizontalPitch.x,                 geometry->c_HorizontalPitch.y,                 geometry->c_HorizontalPitch.z  );
+        printf("Vertical Pitch                         %.4f %.4f %.4f  \n", geometry->c_VerticalPitch.x,                 geometry->c_VerticalPitch.y,                 geometry->c_VerticalPitch.z  );
+        printf("\n");
+    }
+}
+*/
+
+#endif

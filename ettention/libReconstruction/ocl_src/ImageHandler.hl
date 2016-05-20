@@ -1,0 +1,91 @@
+#ifndef IMAGEHANDLER_HL
+#define IMAGEHANDLER_HL
+
+typedef struct
+{
+    int3 resolution;
+    int addressingMode;
+} BufferImageProperties;
+
+float nearestValue3D(__global const uchar* data, int3 dataSize, float3 coord)
+{
+    return convert_float(data[(int)(coord.x) + ((int)(coord.y) * dataSize.x) + ((int)(coord.z) * dataSize.x * dataSize.y)]) / 255.0f;
+}
+
+float nearestValue2D(__global const uchar* data, int2 dataSize, float2 coord)
+{
+    return nearestValue3D(data, (int3)(dataSize, 0), (float3)(coord, 0.0f));
+}
+
+inline float LinearInterpolation(__global const float* data, int dataSize, float coord)
+{
+    float baseCoord;
+    float t = fract(coord - 0.5f, &baseCoord);
+    int coordBX = (int)baseCoord;
+    int coordNX = coordBX + 1;
+    float valBX = ( (coordBX >= 0) && (coordBX < dataSize) ? data[coordBX] : 0.0f);
+    float valNX = ( (coordNX >= 0) && (coordNX < dataSize) ? data[coordNX] : 0.0f);
+    return mix(valBX, valNX, t);
+}
+
+inline float BilinearInterpolation(__global const float* data, int2 dataSize, float2 coord)
+{
+    float baseCoord;
+    float t = fract(coord.y - 0.5f, &baseCoord);
+    int coordBY = convert_int(baseCoord);
+    int coordNY = coordBY + 1;
+    float valBY = ( (coordBY >= 0) && (coordBY < dataSize.y) ? LinearInterpolation(data + coordBY * dataSize.x, dataSize.x, coord.x) : 0.0f);
+    float valNY = ( (coordNY >= 0) && (coordNY < dataSize.y) ? LinearInterpolation(data + coordNY * dataSize.x, dataSize.x, coord.x) : 0.0f);
+    return mix(valBY, valNY, t);
+}
+
+inline float TrilinearInterpolation(__global const float* data, int3 dataSize, float3 coord)
+{
+    float baseCoord;
+    float t = fract(coord.z - 0.5f, &baseCoord);
+    int coordBZ = convert_int(baseCoord);
+    int coordNZ = coordBZ + 1;
+    float valBZ = ( (coordBZ >= 0) && (coordBZ < dataSize.z) ? BilinearInterpolation(data + coordBZ * dataSize.x * dataSize.y, dataSize.xy, coord.xy) : 0.0f);
+    float valNZ = ( (coordNZ >= 0) && (coordNZ < dataSize.z) ? BilinearInterpolation(data + coordNZ * dataSize.x * dataSize.y, dataSize.xy, coord.xy) : 0.0f);
+    return mix(valBZ, valNZ, t);
+}
+
+#ifdef IMAGE_SUPPORT
+
+#define MEMORY_PARAMS(name) name, name##_sp
+#define MEMORY_SIZE(name) get_image_dim(name)
+
+#define TYPE_2D_READONLY(name) __read_only image2d_t name, sampler_t name##_sp
+#define TYPE_3D_READONLY(name) __read_only image3d_t name, sampler_t name##_sp
+#define READ_2D_READONLY(name, coord) read_imagef(name, name##_sp, coord).x
+#define READ_3D_READONLY(name, coord) read_imagef(name, name##_sp, coord).x
+
+#define TYPE_2D_MASK(name) __read_only image2d_t name, sampler_t name##_sp
+#define TYPE_3D_MASK(name) __read_only image3d_t name, sampler_t name##_sp
+#define READ_2D_MASK(name, coord) (convert_float(read_imageui(name, name##_sp, coord).x) / 255.0f)
+#define READ_3D_MASK(name, coord) (convert_float(read_imageui(name, name##_sp, coord).x) / 255.0f)
+
+#else
+
+#define MEMORY_PARAMS(name) name, name##_props
+#define MEMORY_SIZE(name) name##_props->resolution
+
+#define TYPE_2D_READONLY(name) __global const float* name, __global const BufferImageProperties* name##_props
+#define TYPE_3D_READONLY(name) __global const float* name, __global const BufferImageProperties* name##_props
+#define READ_2D_READONLY(name, coord) BilinearInterpolation(name, name##_props->resolution.xy, coord.xy)
+#define READ_3D_READONLY(name, coord) TrilinearInterpolation(name, name##_props->resolution.xyz, coord.xyz)
+
+#define TYPE_2D_MASK(name) __global const uchar* name, __global const BufferImageProperties* name##_props
+#define TYPE_3D_MASK(name) __global const uchar* name, __global const BufferImageProperties* name##_props
+#define READ_2D_MASK(name, coord) nearestValue2D(name, name##_props->resolution.xy, coord.xy)
+#define READ_3D_MASK(name, coord) nearestValue3D(name, name##_props->resolution.xyz, coord.xyz)
+
+#endif
+
+#ifdef USE_PRIOR_KNOWLEDGE_MASK
+    #define READ_3D_MASK_IF_POSSIBLE(volume, coord) READ_3D_MASK(volume, coord)
+#else
+    #define READ_3D_MASK_IF_POSSIBLE(volume, coord) 1.0f
+#endif
+
+#endif

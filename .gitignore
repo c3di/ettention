@@ -1,0 +1,5 @@
+build/
+build_*/
+*.user
+.idea
+ettention_dependencies*

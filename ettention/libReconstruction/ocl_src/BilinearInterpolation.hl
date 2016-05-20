@@ -1,0 +1,24 @@
+float bilinearInterpolation(float2 coordinatesInImage, int2 projectionSize, __global float* projection)
+{
+	float2 pixelPos = (float2) (coordinatesInImage.x, coordinatesInImage.y);
+
+	float xi0f;
+	const float xa = fract(pixelPos.x, &xi0f);
+	const int xi0 = (int) xi0f;
+	const int xi1 = xi0 + 1;
+
+	float yi0f;
+	const float ya = fract(pixelPos.y, &yi0f);
+	const int yi0 = (int) yi0f;
+	const int yi1 = yi0 + 1;
+
+	const float a0 = projection[ yi0 * projectionSize.x + xi0 ];
+	const float a1 = projection[ yi0 * projectionSize.x + xi1 ];
+	const float a  = a1 * xa + a0 * (1.0f - xa);
+
+	const float b0 = projection[ yi1 * projectionSize.x + xi0 ];
+	const float b1 = projection[ yi1 * projectionSize.x + xi1 ];
+	const float b  = b1 * xa + b0 * (1.0f - xa);
+
+	return b * ya + a * (1.0f - ya);
+};

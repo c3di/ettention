@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+	<subVolumeCount value="1" />
+</hardware>
+
+<algorithm value="sart" >
+	<numberOfIterations value="3" />
+	<useLongObjectCompensation value="true"/>
+	<lambda value="0.6" />
+</algorithm>
+
+<input>
+	<projections value=".\shepp_logan_256.mrc" />
+	<tiltAngles  value=".\shepp_logan_256.tlt" />
+</input>
+
+<output>
+	<filename value="..\..\work\discrete_reconstruction\shepp_logan_sart.mrc" />
+	<options>
+		<voxelType value="float32" />
+		<orientation value="xyz_order" />
+	</options>
+</output>
+
+<volume>
+	<dimension value="256 256 256"/>
+	<initValue value="0.0" />
+</volume>
+
+<debug>
+	<outputKernelParameters value="false"/>
+	<writeProjections value="false"/>
+	<writeVirtualProjections value="false"/>
+	<writeResiduals value="false"/>
+	<writeIntermediateVolumes value="false"/>
+	<writeIntermediateVolumesAfterIterations value="false"/>
+	<IMODCompliantLogging value="false"/>
+</debug>

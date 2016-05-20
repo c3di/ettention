@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<input>
+	<projections value=".\shepp_logan_projections_source512_samples3.mrc" />
+	<tiltAngles  value=".\shepp_logan_256.tlt" />
+</input>
+
+<output>
+	<filename value="..\..\work\discrete_reconstruction\shepp_logan_dart.mrc" />
+	<options>
+		<voxelType value="float32" />
+		<orientation value="xyz_order" />
+	</options>
+</output>
+
+<volume>
+	<dimension value="256 256 256" />
+	<initValue value="0.0" />
+</volume>
+
+<algorithm value="sart" >
+	<numberOfIterations value="3" />
+	<useLongObjectCompensation value="true"/>
+	<lambda value="0.6" />
+	<discreteReconstruction value="dart" >
+		<threshold value="0.0 < 0.000002 < 0.01 < 0.25 < 0.65 < 1.00" />
+		<!--<threshold value="0.0 < 0.001 < 0.005 < 0.07 < 0.12 < 0.2" />-->
+		<intensity value="0.0 0.0 0.1 0.2 0.3 1.0" />
+		<iterationsLimit value="10" />
+		<debugOutput>
+			<path value="C:/Ettention/Git/ettention/test/work/discrete_reconstruction" />
+		</debugOutput>
+	</discreteReconstruction>
+</algorithm>
+
+<priorKnowledge>
+	<maskVolumeShouldBePreallocated value="true" /> <!-- DART requires this so far -->
+</priorKnowledge>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+	<subVolumeCount value="1" />
+</hardware>
+
+<debug>
+	<outputKernelParameters value="false"/>
+	<writeProjections value="false"/>
+	<writeVirtualProjections value="false"/>
+	<writeResiduals value="false"/>
+	<writeIntermediateVolumes value="false"/>
+	<writeIntermediateVolumesAfterIterations value="false"/>
+	<IMODCompliantLogging value="false"/>
+</debug>

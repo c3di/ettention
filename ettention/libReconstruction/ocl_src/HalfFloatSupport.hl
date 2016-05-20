@@ -1,0 +1,22 @@
+#ifndef HALF_FLOAT_SUPPORT_CL
+#define HALF_FLOAT_SUPPORT_CL
+
+#define TYPE_BUFFER_BYTE(data)                     __global uchar* data
+
+#ifdef HALF_FLOAT_16 
+    #define TYPE_3D_READWRITE(data)                __global half* data
+    #define READ_3D_READWRITE(data,index)          vload_half(index, data)
+    #define WRITE_3D_READWRITE(data,index,value)   vstore_half(value, index, data)
+#else
+    #define TYPE_3D_READWRITE(data)                __global float* data
+    #define READ_3D_READWRITE(data,index)          data[index]
+    #define WRITE_3D_READWRITE(data,index,value)   data[index] = value
+#endif
+
+#ifdef USE_PRIOR_KNOWLEDGE_MASK
+    #define WRITE_3D_IF_MASK_ALLOWS(volume,index,value,maskValue,default) if(maskValue){ WRITE_3D_READWRITE(volume, index, value);} else {WRITE_3D_READWRITE(volume, index, default);}
+#else
+    #define WRITE_3D_IF_MASK_ALLOWS(volume,index,value,maskValue,default) WRITE_3D_READWRITE(volume, index, value)
+#endif
+
+#endif
