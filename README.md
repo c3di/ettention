@@ -12,7 +12,7 @@ Precompiled binaries are provided in the download section. The software can be o
 ##TL;DR
 * Clone Repo
 * Run create_solution.cmd
-* Find ettention.sln MS Visual Studio solution file in build\ subdirectory and run
+* Find ettention_cmake.sln MS Visual Studio solution file in build\ subdirectory and run
 * If using *nix Then you know what to do without guide [CMake]
 
 ##LICENSING
