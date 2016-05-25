@@ -24,7 +24,7 @@ endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
 find_path(ETTENTION_DEPENDENCIES_ROOT
   NAMES "clAmdFft/clAmdFft.h"
-  PATHS "./ettention_dependencies" "./../ettention_dependencies" "./../../ettention_dependencies"
+  PATHS "./ettention_dependencies" "../ettention_dependencies" "../../ettention_dependencies"
   DOC "Ettention dependencies root directory")
 #  message("Ettention dependencies root: ${ETTENTION_DEPENDENCIES_ROOT}")
 

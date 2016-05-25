@@ -31,10 +31,7 @@ namespace ettention
             }
             projectionResolution = projectionDataSource->getResolution();
 
-            initializeProjectionSet();
-            allocateDataBuffer();
-            initializeMicroscopeGeometry();
-            initializeComputeKernel();
+            init();
         }
 
         TF_ART::TF_ART(TF_Datasource* projectionDataSource, Framework* framework)
@@ -46,14 +43,27 @@ namespace ettention
             ownsProjectionDataSource = false;
             projectionResolution = projectionDataSource->getResolution();
 
+            init();
+        }
+
+        void TF_ART::init()
+        {
             initializeProjectionSet();
             allocateDataBuffer();
             initializeMicroscopeGeometry();
             initializeComputeKernel();
+
+            if( parameterSet->shouldUseAutofocus() )
+                autofocus = new AutomaticFocusComputation(parameterSet, baseScannerGeometry, &projectionSet, projectionDataSource, ownedVolume);
+            else
+                autofocus = nullptr;
         }
 
         TF_ART::~TF_ART()
         {
+            if( autofocus )
+                delete autofocus;
+
             freeDataBuffer();
             deleteComputeKernel();
             delete measuredProjection;
@@ -68,9 +78,6 @@ namespace ettention
 
         void TF_ART::run()
         {
-            if(parameterSet->shouldUseAutofocus())
-                autofocus = new AutomaticFocusComputation(parameterSet, baseScannerGeometry, &projectionSet, projectionDataSource, ownedVolume);
-
             auto numberOfIterations = framework->getParameterSet()->get<AlgorithmParameterSet>()->getNumberOfIterations();
             for(currentIteration = 1; currentIteration <= numberOfIterations; currentIteration++)
             {
@@ -81,9 +88,6 @@ namespace ettention
 
         void TF_ART::runSingleIteration()
         {
-            if( parameterSet->shouldUseAutofocus() )
-                autofocus = new AutomaticFocusComputation(parameterSet, baseScannerGeometry, &projectionSet, projectionDataSource, ownedVolume);
-
             handleOneIteration();
         }
 
@@ -110,15 +114,33 @@ namespace ettention
 
                     projectionIndex = projectionSet.getProjectionIndex(directionIndex, projectionPerDirection);
 
-                    measuredProjection->setObjectOnCPU(projectionDataSource->getProjectionImage(projectionIndex));
+                    try
+                    {
+                        measuredProjection->setObjectOnCPU(projectionDataSource->getProjectionImage(projectionIndex));
+                    } catch( const std::bad_alloc& e )
+                    {
+                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING getProjectionImage(projectionIndex)" << std::endl;
+                        throw e;
+                    }
 
-                    auto props = (STEMScannerGeometry*) projectionDataSource->getScannerGeometry(projectionIndex);
+                    STEMScannerGeometry* props;
+                    try
+                    {
+                        props = (STEMScannerGeometry*)projectionDataSource->getScannerGeometry(projectionIndex);
+                    } catch( const std::bad_alloc& e)
+                    {
+                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING (STEMScannerGeometry*)projectionDataSource->getScannerGeometry(projectionIndex)" << std::endl;
+                        throw e;
+                    }
 
                     if(parameterSet->shouldSkipDirection(props->getTiltAngle()))
                         break;
 
                     if(parameterSet->shouldUseAutofocus())
+                    {
                         autofocus->correctFocus(props, projectionPerDirection);
+                    }
+                    
 
                     projectionProperties[projectionPerDirection] = props;
 
@@ -136,12 +158,34 @@ namespace ettention
                 for (projectionPerDirection = 0; projectionPerDirection < projectionSet.getFocusCount(directionIndex); projectionPerDirection++)
                 {
                     auto props = projectionProperties[projectionPerDirection];
-                    geometricSetup->setScannerGeometry(props->clone());
-                    handleBackProjection();
+
+                    try
+                    {
+                        geometricSetup->setScannerGeometry(props->clone());
+                    } catch( const std::exception& e )
+                    {
+                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED " << e.what() << " DURING geometricSetup->setScannerGeometry(props->clone())" << std::endl;
+                        throw e;
+                    }
+
+                    try
+                    {
+                        handleBackProjection();
+                    } catch( const std::bad_alloc& e )
+                    {
+                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING handleBackProjection()" << std::endl;
+                        throw e;
+                    }
                 }
 
-                writeOutIntermediateVolumeIfRequested("direction_");
-
+                try
+                {
+                    writeOutIntermediateVolumeIfRequested("direction_");
+                } catch( const std::bad_alloc& e )
+                {
+                    std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING writeOutIntermediateVolumeIfRequested(direction_)" << std::endl;
+                    throw e;
+                }
             }
             writeIterationResulIfRequested();
         }
@@ -269,9 +313,30 @@ namespace ettention
 
         void TF_ART::handleBackProjection()
         {
-            compareKernel->getOutput()->setObjectOnCPU(residuals[projectionPerDirection]);
-            backprojectionOperator->setScannerGeometry(projectionProperties[projectionPerDirection]);
-            backprojectionOperator->run();
+            try
+            {
+                compareKernel->getOutput()->setObjectOnCPU(residuals[projectionPerDirection]);
+            } catch( const std::bad_alloc& e )
+            {
+                std::cout << "TRAP IN TF_ART::handleBackProjection CATCHED bad_alloc DURING compareKernel->getOutput()->setObjectOnCPU(residuals[projectionPerDirection])" << std::endl;
+                throw e;
+            }
+            try
+            {
+                backprojectionOperator->setScannerGeometry(projectionProperties[projectionPerDirection]);
+            } catch( const std::bad_alloc& e )
+            {
+                std::cout << "TRAP IN TF_ART::handleBackProjection CATCHED bad_alloc DURING backprojectionOperator->setScannerGeometry(projectionProperties[projectionPerDirection])" << std::endl;
+                throw e;
+            }
+            try
+            {
+                backprojectionOperator->run();
+            } catch( const std::bad_alloc& e )
+            {
+                std::cout << "TRAP IN TF_ART::handleBackProjection CATCHED bad_alloc DURING backprojectionOperator->run()" << std::endl;
+                throw e;
+            }
         }
 
         void TF_ART::writeRunInformationToLog()

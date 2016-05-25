@@ -19,7 +19,15 @@ namespace ettention
         if(resolution.x * resolution.y == 0)
             ETTENTION_THROW_EXCEPTION("Invalid image size: " << resolution.x << "x" << resolution.y << "!");
 
-        data.resize(resolution.x * resolution.y);
+        try
+        {
+            data.resize(resolution.x * resolution.y);
+        } catch( const std::bad_alloc& e )
+        {
+            std::cout << (boost::format("Image::Image(Vec2ui, float*) data.resize is running out of memory. Resolution %1%") % resolution).str() << std::endl;
+            throw e;
+        }
+
         if(initialData)
         {
             data.assign(initialData, initialData + getPixelCount());

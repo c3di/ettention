@@ -3,10 +3,7 @@ project(WBPPluginTest)
 
 INCLUDE(../cmake/CommonFlags)
 SetPolicies()
-
-if(MSVC)
-	add_definitions(/D_VARIADIC_MAX=10  /D_USE_MATH_DEFINES)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing project files
 set(FILE_TYPES *.c *.cpp *.h *.hpp)
@@ -20,7 +17,7 @@ set(WBPPLUGIN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(WBPPLUGIN_INCLUDE_DIR ${WBPPLUGIN_INCLUDE_DIR} PARENT_SCOPE)
 
 # set include directories
- include_directories("${RECONSTRUCTION_TEST_INCLUDE_DIR}"
+include_directories("${RECONSTRUCTION_TEST_INCLUDE_DIR}"
 					"${GTEST_INCLUDE_DIR}"
 					"${Boost_INCLUDE_DIR}"
 					"${LIBRECONSTRUCTION_INCLUDE_DIR}"
@@ -43,10 +40,3 @@ target_link_libraries(${PROJECT_NAME}
 				WBPPlugin
 				${GTEST_BOTH_LIBRARIES}
 				)
-
-# copy necessary files to project folder (work and data folders)
-if (MSVC)
-	add_definitions(/DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-else(MSVC)
-	add_definitions(-DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-endif(MSVC)

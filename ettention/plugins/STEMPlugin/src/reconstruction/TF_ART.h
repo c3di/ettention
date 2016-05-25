@@ -21,6 +21,8 @@ namespace ettention
             TF_ART(Framework* framework);
             TF_ART(TF_Datasource* projectionDataSource, Framework* framework);
 
+            void init();
+
             virtual ~TF_ART();
 
             void run() override;

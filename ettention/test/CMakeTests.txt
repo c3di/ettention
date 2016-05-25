@@ -3,15 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 INCLUDE(../cmake/CommonFlags)
 
 SetPolicies()
-
-if(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP -Zm200")
-	add_definitions(/D_VARIADIC_MAX=10  /D_USE_MATH_DEFINES)
-	add_definitions(/DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-else(MSVC)
-	add_definitions(-DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-	add_definitions(-DBOOST_LOG_DYN_LINK)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing project files
 set(FILE_TYPES *.c *.cpp *.h *.hpp)
@@ -60,4 +52,3 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 add_precompiled_header(${PROJECT_NAME} stdafx.h)
-

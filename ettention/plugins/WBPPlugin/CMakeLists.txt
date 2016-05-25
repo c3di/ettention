@@ -3,15 +3,7 @@ project(WBPPlugin)
 
 INCLUDE(../cmake/CommonFlags)
 SetPolicies()
-
-if(MSVC)
-	add_definitions(/DNOMINMAX /D_CRT_SECURE_NO_WARNINGS /D_USE_MATH_DEFINES -Zm200)
-	add_definitions("/DPLUGIN_API=__declspec(dllexport)")
-else(MSVC)
-	add_definitions(-DPLUGIN_API=)
-	add_definitions(-fPIC)
-	add_definitions(-DBOOST_LOG_DYN_LINK)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing source files
 set(FILE_TYPES *.c *.cc *.cpp *.h *.hpp *.tcc)

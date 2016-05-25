@@ -4,12 +4,7 @@ project(Ettention)
 INCLUDE(../cmake/CommonFlags)
 
 SetPolicies()
-
-if(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP -Zm200")
-else(MSVC)
-	add_definitions(-DBOOST_LOG_DYN_LINK)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing source files
 set(FILE_TYPES *.c *.cc *.cpp *.h *.hpp *.tcc)

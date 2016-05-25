@@ -5,14 +5,7 @@ INCLUDE(../cmake/CommonFlags)
 
 SetPolicies()
 SwitchOnCpp11()
-
-if(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP -Zm200")
-	add_definitions(/DNOMINMAX /D_CRT_SECURE_NO_WARNINGS /D_USE_MATH_DEFINES)
-else(MSVC)
-	add_definitions(-fPIC)
-	add_definitions(-DBOOST_LOG_DYN_LINK)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing source files
 set(FILE_TYPES *.c *.cc *.cpp *.h *.hpp *.tcc)

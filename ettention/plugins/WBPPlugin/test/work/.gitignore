@@ -1,3 +1,6 @@
 *
 !.gitignore
+# To include empty output directories do not ignore dummy
 !dummy
+# Do not ignore dummy even if it is in subdirectory
+!*/

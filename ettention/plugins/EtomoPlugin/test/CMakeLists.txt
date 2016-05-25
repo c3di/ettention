@@ -3,10 +3,7 @@ project(EtomoPluginTest)
 
 INCLUDE(../cmake/CommonFlags)
 SetPolicies()
-
-if(MSVC)
-	add_definitions(/D_VARIADIC_MAX=10  /D_USE_MATH_DEFINES)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing project files
 set(FILE_TYPES *.h *.hpp *.c *.cpp)
@@ -45,11 +42,3 @@ target_link_libraries(${PROJECT_NAME}
 				${OPENCL_LIBRARIES}
 				${GTEST_BOTH_LIBRARIES}
 				)
-
-
-# copy necessary files to project folder (work and data folders)
-if ( MSVC )
-	add_definitions(/DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-else(MSVC)
-	add_definitions(-DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-endif(MSVC)

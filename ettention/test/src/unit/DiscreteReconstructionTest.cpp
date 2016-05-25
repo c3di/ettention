@@ -21,7 +21,14 @@ public:
     }
 };
 
-TEST_F(DiscreteReconstructionTest, DISABLED_Phantom_SheppLogan_ThresholdTest)
+TEST_F(DiscreteReconstructionTest, DISABLED_DT_Phantom_SheppLogan_IdentityTest)
+{
+    //runTestReconstruction(pathToInput + "/shepp_logan_mask_dart.xml");
+    //runTestReconstruction(pathToInput + "/shepp_logan_mask_sart.xml");
+    //TODO: Take (input from SART to DART [initial reconstruction] of first) and (result [reconstruction] of last) and compare. Must be the same
+}
+
+TEST_F(DiscreteReconstructionTest, DISABLED_DT_Phantom_SheppLogan_ThresholdTest)
 {
     auto *volume = VolumeDeserializer::load(pathToData + "/shepp_logan_256.mrc", Voxel::DataType::FLOAT_32);
     GPUMappedVolume source(framework->getOpenCLStack(), volume);
@@ -40,19 +47,19 @@ TEST_F(DiscreteReconstructionTest, DISABLED_Phantom_SheppLogan_ThresholdTest)
     delete volume;
 }
 
-TEST_F(DiscreteReconstructionTest, Phantom_SheppLogan)
+TEST_F(DiscreteReconstructionTest, DISABLED_DT_Phantom_SheppLogan)
 {
-    //runTestReconstruction(pathToInput + "/shepp_logan_mask_dart.xml");
-    //runTestReconstruction(pathToInput + "/shepp_logan_mask_sart.xml");
+    runTestReconstruction(pathToInput + "/shepp_logan_mask_dart.xml");
+    runTestReconstruction(pathToInput + "/shepp_logan_mask_sart.xml");
 }
 
-TEST_F(DiscreteReconstructionTest, DISABLED_Syntetic_Binary)
+TEST_F(DiscreteReconstructionTest, DISABLED_DT_Syntetic_Binary)
 {
     runTestReconstruction(pathToInput + "/syntetic_binary_dart.xml");
     runTestReconstruction(pathToInput + "/syntetic_binary_sart.xml");
 }
 
-TEST_F(DiscreteReconstructionTest, DISABLED_Empiar10009)
+TEST_F(DiscreteReconstructionTest, DISABLED_DT_Real_Empiar10009)
 {
     runTestReconstruction(pathToInput + "/discrete_test.xml");
     runTestReconstruction(pathToInput + "/sart_test.xml");

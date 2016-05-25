@@ -3,10 +3,7 @@ project(STEMPluginTest)
 
 INCLUDE(../cmake/CommonFlags)
 SetPolicies()
-
-if(MSVC)
-	add_definitions(/D_VARIADIC_MAX=10  /D_USE_MATH_DEFINES)
-endif(MSVC)
+SetCommonDefinitions()
 
 # find all directories containing source files
 set(FILE_TYPES *.c *.cpp *.h *.hpp)
@@ -43,10 +40,3 @@ target_link_libraries(${PROJECT_NAME}
 				STEMPlugin
 				${GTEST_BOTH_LIBRARIES}
 				)
-
-# copy necessary files to project folder (work and data folders)
-if (MSVC)
-	add_definitions(/DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-else(MSVC)
-	add_definitions(-DTESTDATA_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
-endif(MSVC)

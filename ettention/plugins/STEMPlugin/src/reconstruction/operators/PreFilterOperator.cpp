@@ -45,7 +45,8 @@ namespace ettention
         {
             residual->ensureIsUpToDateOnGPU();
             attachUnfilteredResidual();
-            for(unsigned int i = 1; i < NumberOfSamplingSteps(); i++)
+            auto numberOfSteps = NumberOfSamplingSteps();
+            for( unsigned int i = 1; i < numberOfSteps; i++ )
             {
                 computeAdjointOperator(i);
                 convolutionOperator->execute();
@@ -97,7 +98,18 @@ namespace ettention
 
         void PrefilterOperator::updateOutputBufferResolution()
         {
-            prefilteredResiduals->setObjectOnCPU(new Image(getTotalResolutionOfPrefilteredResidual()));
+            auto updatedResolution = getTotalResolutionOfPrefilteredResidual();
+            if( updatedResolution.y > 8192 )
+                throw Exception( (boost::format("Resolution (%1%) from PrefilterOperator::getTotalResolutionOfPrefilteredResidual is too huge to be real") % updatedResolution).str());
+
+            try
+            {
+                prefilteredResiduals->setObjectOnCPU(new Image(updatedResolution));
+            } catch( const std::bad_alloc& e )
+            {
+                std::cout << "TRAP IN PrefilterOperator::updateOutputBufferResolution CATCHED bad_alloc DURING new Image(getTotalResolutionOfPrefilteredResidual()" << std::endl;
+                throw e;
+            }
             prefilteredResiduals->takeOwnershipOfObjectOnCPU();
         }
 

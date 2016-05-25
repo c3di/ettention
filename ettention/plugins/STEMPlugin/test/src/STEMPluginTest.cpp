@@ -474,37 +474,30 @@ TEST_F(STEMPluginTest, TF_ART_TEST_Regularization)
     delete geometricSetup->getVolume();
     geometricSetup->setVolume(new FloatVolume(volumeOptions.getResolution(), 1.0f, 1));
 
-    XMLParameterSource* xmlParameter = new XMLParameterSource(testdataDirectory + "tf_art/regularization.xml");
-    framework->resetParameterSource(xmlParameter);
+    XMLParameterSource xmlParameter(testdataDirectory + "tf_art/regularization.xml");
+    framework->resetParameterSource(&xmlParameter);
 
     TF_ART application(framework);
     application.run();
-    delete xmlParameter;
 }
 
 TEST_F(STEMPluginTest, TF_ART_TEST_Adjoint)
 {
-    Volume *volume;
+    delete geometricSetup->getVolume();
+    geometricSetup->setVolume(new FloatVolume(volumeOptions.getResolution(), 1.0f, 1));
+
+    XMLParameterSource xmlParameter(testdataDirectory + "tf_art/adjoint.xml");
+    framework->resetParameterSource(&xmlParameter);
+
+    TF_ART application(framework);
     // This is trap for mysterious crash that periodically appears on Linux build of Ettention on Jenkins
     try
     {
-        volume = new FloatVolume(volumeOptions.getResolution(), 1.0f, 1);
-    }
-    catch( const std::bad_alloc& )
+        application.run();
+    } catch( const std::bad_alloc& )
     {
-        std::string message("TRAPPED! STEMPluginTest::TF_ART_TEST_Adjoint: Not enough memory to allocate volume");
+        std::string message("TRAP IN STEMPluginTest::TF_ART_TEST_Adjoint CATCHED bad_alloc DURING application.run()");
         LOGGER(message);
         std::cout << message << std::endl;
-        exit(EXIT_FAILURE);
     }
-
-    delete geometricSetup->getVolume();
-    geometricSetup->setVolume(volume);
-
-    XMLParameterSource* xmlParameter = new XMLParameterSource(testdataDirectory + "tf_art/adjoint.xml");
-    framework->resetParameterSource(xmlParameter);
-
-    TF_ART application(framework);
-    application.run();
-    delete xmlParameter;
 }

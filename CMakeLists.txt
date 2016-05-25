@@ -9,14 +9,15 @@ project(ettention_cmake)
 set(CMAKE_BINARY_DIR ${PROJECT_BINARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-
 set(CMAKE_USE_RELATIVE_PATHS FALSE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-INCLUDE(GetSourceFiles)
-INCLUDE(SetPolicies)
-INCLUDE(PrecompiledHeaders)
-INCLUDE(Cpp11)
+
+include(GetSourceFiles)
+include(SetPolicies)
+include(SetCommonDefinitions)
+include(PrecompiledHeaders)
+include(Cpp11)
 
 SetPolicies()
 SwitchOnCpp11()
@@ -73,15 +74,14 @@ if(MSVC)
 	# get destination directory
 	get_property(BIN_DEBUG TARGET libReconstruction PROPERTY LOCATION_Debug)
 	get_filename_component(BIN_DEBUG ${BIN_DEBUG} PATH)
-	get_property(BIN_RELEASE TARGET libReconstruction PROPERTY LOCATION_Release)
-	get_filename_component(BIN_RELEASE ${BIN_RELEASE} PATH)
-
 	file(COPY 
 		"${FREEIMAGE_DEBUG_DIR}/FreeImaged.dll" 
 		"${FREEIMAGE_DEBUG_DIR}/FreeImagePlusd.dll" 
 		"${CLAMDFFT_DEBUG_DIR}/clFFT.dll"
 		DESTINATION ${BIN_DEBUG})
 
+	get_property(BIN_RELEASE TARGET libReconstruction PROPERTY LOCATION_Release)
+	get_filename_component(BIN_RELEASE ${BIN_RELEASE} PATH)
 	file(COPY 
 		"${FREEIMAGE_RELEASE_DIR}/FreeImage.dll" 
 		"${FREEIMAGE_RELEASE_DIR}/FreeImagePlus.dll" 
