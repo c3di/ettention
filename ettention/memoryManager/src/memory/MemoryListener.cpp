@@ -151,7 +151,7 @@ namespace ettention
         }
 
         out << "+------------------";
-        for(auto i = 0; i < std::max(16, (int)name.size() + 1); ++i)
+        for(auto i = 0; i < std::min( std::max(16, (int)name.size() + 1), 59); ++i)
         {
             out << "-";
         }

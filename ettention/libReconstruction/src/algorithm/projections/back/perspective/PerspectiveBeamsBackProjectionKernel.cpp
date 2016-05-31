@@ -5,6 +5,7 @@
 #include "framework/math/Matrix4x4.h"
 #include "gpu/opencl/CLKernel.h"
 #include "model/geometry/GeometricSetup.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 #include "setup/parameterset/PriorKnowledgeParameterSet.h"
 
 namespace ettention

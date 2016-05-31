@@ -78,7 +78,6 @@ TEST_F(EvaluationTest, CovarianceTest)
     std::vector<float> v2{ 3, 2, -3, -5, 2, 0, 2, -1, 1, -9 };
 
     float coVariance = StatisticalStandardMeasures::computeCovariance(v1, v2, false);
-    std::cout << coVariance << std::endl;
     ASSERT_FLOAT_EQ(coVariance, 14.459998f);
 
     coVariance = StatisticalStandardMeasures::computeCovariance(v1, v2);

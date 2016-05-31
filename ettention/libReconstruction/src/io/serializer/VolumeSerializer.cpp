@@ -3,6 +3,7 @@
 #include "io/serializer/MRCWriter.h"
 #include "framework/error/Exception.h"
 #include "framework/Framework.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 #include "setup/parameterset/OutputParameterSet.h"
 
 namespace ettention

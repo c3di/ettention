@@ -2,6 +2,7 @@
 #include "DiscreteReconstructionAlgorithm.h"
 
 #include "algorithm/reconstruction/discrete/DARTIteration.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 #include "setup/parameterset/OutputParameterSet.h"
 
 namespace ettention

@@ -1,8 +1,8 @@
 #pragma once
+#include "algorithm/projections/forward/ForwardProjectionKernel.h"
 
 namespace ettention
 {
-    class ForwardProjectionKernel;
     class Framework;
     class GeometricSetup;
     class GPUMappedVolume;
@@ -24,7 +24,7 @@ namespace ettention
 
     public:
         explicit ForwardProjectionFactory();
-        ~ForwardProjectionFactory() {}
+        ~ForwardProjectionFactory();
 
         void RegisterCreator(std::unique_ptr<InstanceCreator> creator);
         ForwardProjectionKernel* CreateKernelInstance(Framework* framework, const GeometricSetup* geometricSetup, GPUMappedVolume* volume, GPUMappedVolume* priorKnowledgeMask) const;

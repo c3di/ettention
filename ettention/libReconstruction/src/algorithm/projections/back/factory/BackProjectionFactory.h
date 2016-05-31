@@ -1,9 +1,12 @@
 #pragma once
 #include "algorithm/projections/back/BackProjectionKernel.h"
-#include "setup/parameterset/AlgebraicParameterSet.h"
 
 namespace ettention
 {
+    class Framework;
+    class GeometricSetup;
+    class GPUMappedVolume;
+
     class BackProjectionFactory final
     {
     public:

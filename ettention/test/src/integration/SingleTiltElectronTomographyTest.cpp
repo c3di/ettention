@@ -12,7 +12,7 @@ class SingleTiltElectronTomographyTest : public TestBase
 public:
     void OwnSetUp()
     {
-        Logger::getInstance().setLogFilename(std::string(TESTDATA_DIR) + "/work/jason64/SingleTiltElectronTomographyTest.log");
+        Logger::getInstance().setLogFilename(std::string(TESTDATA_DIR) + "/work/empiar_10009/SingleTiltElectronTomographyTest.log");
         Logger::getInstance().activateFileLog(Logger::FORMAT_SIMPLE);
     }
 

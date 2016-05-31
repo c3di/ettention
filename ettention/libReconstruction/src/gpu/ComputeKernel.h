@@ -14,6 +14,7 @@ namespace ettention
         virtual ~ComputeKernel();
 
         void run();
+        const std::string& getKernelName() const;
 
     protected:
         virtual void prepareKernelArguments() = 0;
@@ -22,5 +23,6 @@ namespace ettention
 
         CLKernel* implementation;
         CLAbstractionLayer* abstractionLayer;
+        std::string kernelName;
     };
 }

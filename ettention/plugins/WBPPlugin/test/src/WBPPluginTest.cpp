@@ -3,8 +3,9 @@
 #include <framework/test/TestBase.h>
 #include <model/volume/StackComparator.h>
 #include <reconstruction/WBP.h>
-#include <setup/parametersource/XMLParameterSource.h>
+#include <setup/parameterset/AlgebraicParameterSet.h>
 #include <setup/parameterset/OutputParameterSet.h>
+#include <setup/parametersource/XMLParameterSource.h>
 
 namespace ettention
 {

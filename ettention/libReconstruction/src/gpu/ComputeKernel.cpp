@@ -8,6 +8,7 @@ namespace ettention
     ComputeKernel::ComputeKernel(Framework* framework, const std::string& sourceCode, const std::string& kernelName, const std::string& kernelCaption, const std::string& additionalKernelDefines)
         : implementation(new CLKernel(framework, kernelCaption, sourceCode, kernelName, additionalKernelDefines))
         , abstractionLayer(framework->getOpenCLStack())
+        , kernelName(kernelName)
     {
     }
 
@@ -23,4 +24,10 @@ namespace ettention
         implementation->run();
         postRun();
     }
+
+    const std::string& ComputeKernel::getKernelName() const
+    {
+        return kernelName;
+    }
+
 }

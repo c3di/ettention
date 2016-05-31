@@ -16,6 +16,9 @@ namespace ettention
             , residual(residual)
             , maxRadius(maxRadius)
         {
+            if( residual->getResolution().y > 8192 )
+                throw Exception((boost::format("Resolution (%1%) from PrefilterOperator::PrefilterOperator is too huge to be real") % residual->getResolution()).str());
+
             circleGenerator = new GenerateCircularPSFKernel(framework, residual->getResolution(), 0.0f);
             convolutionOperator = new ConvolutionFourierSpaceImplementation(framework, residual, circleGenerator->getOutput(), false);
 
@@ -99,15 +102,15 @@ namespace ettention
         void PrefilterOperator::updateOutputBufferResolution()
         {
             auto updatedResolution = getTotalResolutionOfPrefilteredResidual();
-            if( updatedResolution.y > 8192 )
-                throw Exception( (boost::format("Resolution (%1%) from PrefilterOperator::getTotalResolutionOfPrefilteredResidual is too huge to be real") % updatedResolution).str());
+            if( updatedResolution.y > 16386 )
+                throw Exception( (boost::format("TRAP IN PrefilterOperator::updateOutputBufferResolution CATCHED suspicious resolution (%1% too huge to be real) FROM  getTotalResolutionOfPrefilteredResidual()") % updatedResolution).str());
 
             try
             {
                 prefilteredResiduals->setObjectOnCPU(new Image(updatedResolution));
             } catch( const std::bad_alloc& e )
             {
-                std::cout << "TRAP IN PrefilterOperator::updateOutputBufferResolution CATCHED bad_alloc DURING new Image(getTotalResolutionOfPrefilteredResidual()" << std::endl;
+                std::cout << (boost::format("TRAP IN PrefilterOperator::updateOutputBufferResolution CATCHED bad_alloc DURING new Image(%1%)") % updatedResolution).str() << std::endl;
                 throw e;
             }
             prefilteredResiduals->takeOwnershipOfObjectOnCPU();

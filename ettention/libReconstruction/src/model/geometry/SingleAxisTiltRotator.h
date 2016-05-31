@@ -14,8 +14,8 @@ namespace ettention
     public:
         SingleAxisTiltRotator();
         ~SingleAxisTiltRotator();
-
-        void setBaseScannerGeometry( ScannerGeometry* baseScannerGeometry);
+        
+        void setBaseScannerGeometry(ScannerGeometry* baseScannerGeometry); /** Careful! setBaseScannerGeometry takes OWNERSHIP over argument **/
         ScannerGeometry* getBaseScannerGeometry() const;
         ScannerGeometry* getBaseScannerGeometry();
         ScannerGeometry* createRotatedScannerGeometry(float tiltAngleInDegree, float xAxisTiltAngleInDegree = 0.0f);

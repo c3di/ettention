@@ -15,14 +15,16 @@ namespace ettention
                                                      const GeometricSetup* geometricSetup,
                                                      GPUMappedVolume* volume,
                                                      GPUMappedVolume* priorKnowledgeMask,
-                                                     unsigned int samples)
-        : ComputeKernel(framework, sourceCode, kernelName, kernelCaption)
+                                                     unsigned int samples,
+                                                     const std::string& additionalDefines)
+        : ComputeKernel(framework, sourceCode, kernelName, kernelCaption,
+                        additionalDefines + (priorKnowledgeMask ? " -D USE_PRIOR_KNOWLEDGE_MASK" : ""))
         , projectionResolution(0, 0)
         , volume(volume)
         , priorKnowledgeMask(priorKnowledgeMask)
         , geometricSetup(geometricSetup)
-        , traversalLength(0)
-        , virtualProjection(0)
+        , traversalLength(nullptr)
+        , virtualProjection(nullptr)
         , samples(samples)
     {
     }

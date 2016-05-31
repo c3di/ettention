@@ -20,7 +20,8 @@ namespace ettention
                                 const GeometricSetup* geometricSetup,
                                 GPUMappedVolume* volume,
                                 GPUMappedVolume* priorKnowledgeMask,
-                                unsigned int samples);
+                                unsigned int samples,
+                                const std::string& additionalDefines = "");
         ~ForwardProjectionKernel();
 
         GPUMappedVolume* getVolume();

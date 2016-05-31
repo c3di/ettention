@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BackProjectionFactory.h"
 #include "algorithm/projections/back/factory/DefaultBackProjectionCreator.h"
+#include "framework/Logger.h"
 
 namespace ettention
 {
@@ -33,6 +34,7 @@ namespace ettention
             auto kernel = (*it)->CreateKernelInstance(framework, geometricSetup, volume, priorKnowledgeMask);
             if(kernel)
             {
+                LOGGER_IMP((boost::format("BackProjectionFactory chosen as responsible %1%.") % kernel->getKernelName()).str());
                 return kernel;
             }
         }

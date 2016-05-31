@@ -15,11 +15,11 @@ namespace ettention
 
         STEMScannerGeometry::STEMScannerGeometry(const STEMScannerGeometry* other)
             : ParallelScannerGeometry(other)
+            , tiltAngle(other->tiltAngle)
+            , focalDepth(other->focalDepth)
+            , focalDifferenceBetweenImages(other->focalDifferenceBetweenImages)
+            , confocalOpeningHalfAngle(other->confocalOpeningHalfAngle)
         {
-            this->tiltAngle = other->tiltAngle;
-            this->focalDepth = other->focalDepth;
-            this->focalDifferenceBetweenImages = other->focalDifferenceBetweenImages;
-            this->confocalOpeningHalfAngle = other->confocalOpeningHalfAngle;
         }
 
         STEMScannerGeometry::STEMScannerGeometry(ImageStackDatasource* inputStack)
@@ -41,12 +41,12 @@ namespace ettention
                                                  float focalDepth, 
                                                  float focalDifferenceBetweenImages, 
                                                  float confocalOpeningHalfAngle)
-        : ParallelScannerGeometry(sourceBase, detectorBase, horizontalPitch, verticalPitch, resolution)
+            : ParallelScannerGeometry(sourceBase, detectorBase, horizontalPitch, verticalPitch, resolution)
+            , tiltAngle(tiltAngle)
+            , focalDepth(focalDepth)
+            , focalDifferenceBetweenImages(focalDifferenceBetweenImages)
+            , confocalOpeningHalfAngle(confocalOpeningHalfAngle)
         {
-            this->tiltAngle = tiltAngle;
-            this->focalDepth = focalDepth;
-            this->focalDifferenceBetweenImages = focalDifferenceBetweenImages;
-            this->confocalOpeningHalfAngle = confocalOpeningHalfAngle;
         }
 
         STEMScannerGeometry::~STEMScannerGeometry()

@@ -6,6 +6,7 @@
 #include "model/geometry/GeometricSetup.h"
 #include "setup/parameterset/BlobParameterSet.h"
 #include "setup/parameterset/AlgorithmParameterSet.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 
 namespace ettention
 {

@@ -5,21 +5,22 @@
 #include "CLMemoryStructure.h"
 #include "CLSampler.h"
 #include "framework/Framework.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 #include "setup/parameterset/DebugParameterSet.h"
 #include "setup/parameterset/OptimizationParameterSet.h"
 
 namespace ettention
 {
-    CLKernel::CLKernel(Framework* framwork, const std::string& caption, const std::string& sourceCode, const std::string& kernelName, const std::string& additionalKernelDefines)
-        : clal(framwork->getOpenCLStack())
+    CLKernel::CLKernel(Framework* framework, const std::string& caption, const std::string& sourceCode, const std::string& kernelName, const std::string& additionalKernelDefines)
+        : clal(framework->getOpenCLStack())
         , caption(caption)
-        , debugKernelParameters(framwork->getParameterSet()->get<DebugParameterSet>()->shouldDisplayKernelParameters())
+        , debugKernelParameters(framework->getParameterSet()->get<DebugParameterSet>()->shouldDisplayKernelParameters())
         , localWorkSize(0)
     {
         getParameterList(sourceCode, kernelName, kernelParameters);
         std::string tempSourceCode = sourceCode;
         fixSourceForImageSupport(tempSourceCode);
-        program = generateProgramFromSourceCode(tempSourceCode, kernelName, additionalKernelDefines + getKernelDefines(framwork));
+        program = generateProgramFromSourceCode(tempSourceCode, kernelName, additionalKernelDefines + getKernelDefines(framework));
         clKernel = clCreateKernel(program, kernelName.c_str(), &err);
         CL_ASSERT(err);
         globalWorkSize[0] = globalWorkSize[1] = globalWorkSize[2] = 1;

@@ -25,6 +25,14 @@ namespace ettention
 
         void Adjoint_BackProjectionOperator::run()
         {
+            try
+            {
+                prefilterOperator->setMaxRadius(getMaximalBlurrRadius());
+            } catch( const Exception & )
+            {
+                std::cout << (boost::format("TRAP IN Adjoint_BackProjectionOperator::run(angle %1%, resolution %2%) CATCHED Exception DURING prefilterOperator->setMaxRadius(%3%)") % this->scannerGeometry->getConfocalOpeningHalfAngle() % volume->getProperties().getVolumeResolution() % getMaximalBlurrRadius()).str() << std::endl;
+            }
+
             computeRayLengthKernel->run();
             prefilterOperator->run();
 
@@ -39,9 +47,6 @@ namespace ettention
         void Adjoint_BackProjectionOperator::setScannerGeometry(STEMScannerGeometry* geometry)
         {
             TFS_BackProjectionOperator::setScannerGeometry(geometry);
-
-            prefilterOperator->setMaxRadius(getMaximalBlurrRadius());
-
             backProjectionKernel->setScannerGeometry(geometry);
         }
 

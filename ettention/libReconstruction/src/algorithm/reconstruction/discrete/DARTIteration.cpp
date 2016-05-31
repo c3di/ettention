@@ -4,6 +4,7 @@
 #include "framework/Framework.h"
 #include "algorithm/volumemanipulation/ConvolutionKernelGenerator.h"
 #include "io/serializer/MRCWriter.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 #include "setup/parameterset/AlgorithmParameterSet.h"
 #include "setup/parameterset/OutputParameterSet.h"
 

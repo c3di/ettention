@@ -6,13 +6,14 @@
 #include "algorithm/projections/forward/perspective/PerspectiveBeamsForwardProjectionWithBlobsKernel.h"
 #include "framework/Framework.h"
 #include "model/geometry/GeometricSetup.h"
+#include "model/geometry/ParallelScannerGeometry.h"
+#include "model/geometry/PerspectiveScannerGeometry.h"
 #include "setup/parameterset/AlgorithmParameterSet.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
 #include "setup/parameterset/BlobParameterSet.h"
 #include "setup/parameterset/DebugParameterSet.h"
 #include "setup/parameterset/ForwardProjectionParameterSet.h"
 #include "setup/parameterset/OptimizationParameterSet.h"
-#include "model/geometry/ParallelScannerGeometry.h"
-#include "model/geometry/PerspectiveScannerGeometry.h"
 
 namespace ettention
 {

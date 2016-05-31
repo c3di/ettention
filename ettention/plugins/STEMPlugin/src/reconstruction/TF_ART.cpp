@@ -113,25 +113,9 @@ namespace ettention
                         continue;
 
                     projectionIndex = projectionSet.getProjectionIndex(directionIndex, projectionPerDirection);
+                    measuredProjection->setObjectOnCPU(projectionDataSource->getProjectionImage(projectionIndex));
 
-                    try
-                    {
-                        measuredProjection->setObjectOnCPU(projectionDataSource->getProjectionImage(projectionIndex));
-                    } catch( const std::bad_alloc& e )
-                    {
-                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING getProjectionImage(projectionIndex)" << std::endl;
-                        throw e;
-                    }
-
-                    STEMScannerGeometry* props;
-                    try
-                    {
-                        props = (STEMScannerGeometry*)projectionDataSource->getScannerGeometry(projectionIndex);
-                    } catch( const std::bad_alloc& e)
-                    {
-                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING (STEMScannerGeometry*)projectionDataSource->getScannerGeometry(projectionIndex)" << std::endl;
-                        throw e;
-                    }
+                    STEMScannerGeometry* props = (STEMScannerGeometry*)projectionDataSource->getScannerGeometry(projectionIndex);
 
                     if(parameterSet->shouldSkipDirection(props->getTiltAngle()))
                         break;
@@ -158,34 +142,11 @@ namespace ettention
                 for (projectionPerDirection = 0; projectionPerDirection < projectionSet.getFocusCount(directionIndex); projectionPerDirection++)
                 {
                     auto props = projectionProperties[projectionPerDirection];
-
-                    try
-                    {
-                        geometricSetup->setScannerGeometry(props->clone());
-                    } catch( const std::exception& e )
-                    {
-                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED " << e.what() << " DURING geometricSetup->setScannerGeometry(props->clone())" << std::endl;
-                        throw e;
-                    }
-
-                    try
-                    {
-                        handleBackProjection();
-                    } catch( const std::bad_alloc& e )
-                    {
-                        std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING handleBackProjection()" << std::endl;
-                        throw e;
-                    }
+                    geometricSetup->setScannerGeometry(props->clone());
+                    handleBackProjection();
                 }
 
-                try
-                {
-                    writeOutIntermediateVolumeIfRequested("direction_");
-                } catch( const std::bad_alloc& e )
-                {
-                    std::cout << "TRAP IN TF_ART::handleOneIteration CATCHED bad_alloc DURING writeOutIntermediateVolumeIfRequested(direction_)" << std::endl;
-                    throw e;
-                }
+                writeOutIntermediateVolumeIfRequested("direction_");
             }
             writeIterationResulIfRequested();
         }
@@ -313,30 +274,9 @@ namespace ettention
 
         void TF_ART::handleBackProjection()
         {
-            try
-            {
-                compareKernel->getOutput()->setObjectOnCPU(residuals[projectionPerDirection]);
-            } catch( const std::bad_alloc& e )
-            {
-                std::cout << "TRAP IN TF_ART::handleBackProjection CATCHED bad_alloc DURING compareKernel->getOutput()->setObjectOnCPU(residuals[projectionPerDirection])" << std::endl;
-                throw e;
-            }
-            try
-            {
-                backprojectionOperator->setScannerGeometry(projectionProperties[projectionPerDirection]);
-            } catch( const std::bad_alloc& e )
-            {
-                std::cout << "TRAP IN TF_ART::handleBackProjection CATCHED bad_alloc DURING backprojectionOperator->setScannerGeometry(projectionProperties[projectionPerDirection])" << std::endl;
-                throw e;
-            }
-            try
-            {
-                backprojectionOperator->run();
-            } catch( const std::bad_alloc& e )
-            {
-                std::cout << "TRAP IN TF_ART::handleBackProjection CATCHED bad_alloc DURING backprojectionOperator->run()" << std::endl;
-                throw e;
-            }
+            compareKernel->getOutput()->setObjectOnCPU(residuals[projectionPerDirection]);
+            backprojectionOperator->setScannerGeometry(projectionProperties[projectionPerDirection]);
+            backprojectionOperator->run();
         }
 
         void TF_ART::writeRunInformationToLog()

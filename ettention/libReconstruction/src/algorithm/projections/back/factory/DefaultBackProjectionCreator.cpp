@@ -6,11 +6,12 @@
 #include "algorithm/projections/back/perspective/PerspectiveBeamsBackProjectionWithBlobsKernel.h"
 #include "framework/Framework.h"
 #include "model/geometry/GeometricSetup.h"
-#include "setup/parameterset/AlgorithmParameterSet.h"
-#include "setup/parameterset/BackprojectionParameterSet.h"
-#include "setup/parameterset/BlobParameterSet.h"
 #include "model/geometry/ParallelScannerGeometry.h"
 #include "model/geometry/PerspectiveScannerGeometry.h"
+#include "setup/parameterset/AlgorithmParameterSet.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
+#include "setup/parameterset/BackprojectionParameterSet.h"
+#include "setup/parameterset/BlobParameterSet.h"
 
 namespace ettention
 {

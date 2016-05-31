@@ -84,18 +84,25 @@ public:
 
     GeometricSetup* getDefaultGeometricSetup()
     {
-        sourcePosition = Vec3f(-64.0f, -64.0f, -128.0f);
-        detectorPosition = Vec3f(-64.0f, -64.0f, 128.0f);
+        Vec3f sourcePosition(-64.0f, -64.0f, -128.0f);
+        Vec3f detectorPosition(-64.0f, -64.0f, 128.0f);
         Vec3f horizontalPitch(0.5f, 0.0f, 0.0f);
         Vec3f verticalPitch(0.0f, 0.5f, 0.0f);
-        STEMScannerGeometry* baseScannerGeometry = new STEMScannerGeometry( projectionResolution );
-        baseScannerGeometry->set(sourcePosition, detectorPosition, horizontalPitch, verticalPitch);
+        float tiltAngle(0.0f);
+        float focalDepth(0.0f);
+        float focalDifferenceBetweenImages(16.0f);
+        float confocalOpeningHalfAngle(0.21f);
 
-        baseScannerGeometry->setFocalDepth(0.0f);
-        baseScannerGeometry->setTiltAngle(0.0f);
-        baseScannerGeometry->setFocalDifferenceBetweenImages(16.0f);
-        baseScannerGeometry->setConfocalOpeningHalfAngle(0.21f);
-
+        STEMScannerGeometry* baseScannerGeometry = new STEMScannerGeometry( sourcePosition
+                                                                          , detectorPosition
+                                                                          , horizontalPitch
+                                                                          , verticalPitch
+                                                                          , projectionResolution
+                                                                          , tiltAngle
+                                                                          , focalDepth
+                                                                          , focalDifferenceBetweenImages
+                                                                          , confocalOpeningHalfAngle
+                                                                          );
         satRotator->setBaseScannerGeometry(baseScannerGeometry);
         return new GeometricSetup(baseScannerGeometry->clone());
     }
@@ -112,7 +119,6 @@ public:
     GPUMapped<Image>* rayLengthImage;
     std::string testdataDirectory, workDirectory;
 
-    Vec3f sourcePosition, detectorPosition;
     STEMPlugin* plugin;
     PluginManager* pluginManager;
     VolumeParameterSet volumeOptions;
@@ -490,14 +496,14 @@ TEST_F(STEMPluginTest, TF_ART_TEST_Adjoint)
     framework->resetParameterSource(&xmlParameter);
 
     TF_ART application(framework);
-    // This is trap for mysterious crash that periodically appears on Linux build of Ettention on Jenkins
     try
     {
         application.run();
-    } catch( const std::bad_alloc& )
+    } catch( const std::bad_alloc& e)
     {
-        std::string message("TRAP IN STEMPluginTest::TF_ART_TEST_Adjoint CATCHED bad_alloc DURING application.run()");
-        LOGGER(message);
-        std::cout << message << std::endl;
+        std::cout << "std::bad_alloc exception caught: " << e.what() << std::endl;
+    } catch( const Exception &)
+    {
+        std::cout << "Ettention exception caught: " << std::endl;
     }
 }

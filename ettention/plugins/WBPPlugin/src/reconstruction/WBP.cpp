@@ -8,11 +8,12 @@
 #include <io/datasource/ImageStackDatasource.h>
 #include <io/serializer/ImageSerializer.h>
 #include <model/geometry/GeometricSetup.h>
-#include <setup/parameterset/HardwareParameterSet.h>
-#include "setup/WBPParameterSet.h"
 #include "model/geometry/ParallelScannerGeometry.h"
 #include "model/RamLakGenerator.h"
 #include "model/volume/FloatVolume.h"
+#include "setup/parameterset/AlgebraicParameterSet.h"
+#include <setup/parameterset/HardwareParameterSet.h>
+#include "setup/WBPParameterSet.h"
 
 namespace ettention
 {

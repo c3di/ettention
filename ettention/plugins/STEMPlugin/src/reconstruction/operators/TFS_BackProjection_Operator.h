@@ -11,7 +11,7 @@ namespace ettention
 {
     namespace stem
     {
-		class STEMScannerGeometry;
+        class STEMScannerGeometry;
 
         class PLUGIN_API TFS_BackProjectionOperator
         {
@@ -22,12 +22,12 @@ namespace ettention
             virtual void run() = 0;
             virtual GPUMappedVolume* getOutput();
 
-			virtual void setScannerGeometry(STEMScannerGeometry* scannerGeometry);
+            virtual void setScannerGeometry(STEMScannerGeometry* scannerGeometry);
 
         protected:
             CLAbstractionLayer* clContext;
             GeometricSetup* geometricSetup;
-			STEMScannerGeometry* scannerGeometry;
+            STEMScannerGeometry* scannerGeometry;
             GPUMappedVolume* volume;
             GPUMapped<Image>* residual;
             GPUMapped<Image>* rayLengthImage;
