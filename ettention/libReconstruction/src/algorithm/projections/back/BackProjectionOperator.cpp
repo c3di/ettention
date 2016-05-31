@@ -15,8 +15,8 @@ namespace ettention
         , geometricSetup(geometricSetup)
         , volume(volume)
         , priorKnowledgeMask(priorKnowledgeMask)
-        , voxelizer(0)
-        , kernel(0)
+        , voxelizer(nullptr)
+        , kernel(nullptr)
     {
         kernel = framework->getBackProjectionFactory()->CreateKernelInstance(framework, geometricSetup, volume, priorKnowledgeMask);
         if( framework->getParameterSet()->get<AlgorithmParameterSet>()->getBasisFunctions() == AlgorithmParameterSet::BasisFunctionType::BASIS_BLOBS )

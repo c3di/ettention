@@ -13,7 +13,6 @@ namespace ettention
 
     Logger::Logger()
     {
-        printPluginList = true;
         consoleLog = boost::shared_ptr<tSinkSyncOstream>(new tSinkSyncOstream);
         fileLog = boost::shared_ptr<tSinkSyncOstream>(new tSinkSyncOstream);
         addGlobalMessageAttributes();
@@ -78,16 +77,6 @@ namespace ettention
     {
         if( fileLogStream )
             fileLogStream->flush();
-    }
-
-    void Logger::setPrintPluginList(bool printPluginList)
-    {
-        this->printPluginList = printPluginList;
-    }
-
-    bool Logger::shouldPrintPluginList() const
-    {
-        return printPluginList;
     }
 
     void Logger::activateFileLog(FormatType format)

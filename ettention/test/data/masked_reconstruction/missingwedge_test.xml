@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<input>
+	<projections value="..\..\work\contour_shepp_logan\shepp_logan_missing" />
+	<skipProjections value="0-4,84-89" />
+</input>
+
+<output>
+	<filename value="..\..\work\contour_shepp_logan\shepp_logan_reconstructed_mw.mrc" />
+    <options>
+        <voxelType value="float32" />
+        <orientation value="xyz_order" />
+    </options>
+</output>
+
+<algorithm value="sart" >
+	<numberOfIterations value="10" />
+	<useLongObjectCompensation value="false"/>
+	<lambda value="0.1" />
+</algorithm>
+
+<volume>
+	<dimension value="128 128 128"/>
+	<resolution value="128 128 128"/>
+    <initValue value="0.0" />
+</volume>
+
+<forwardProjection>
+	<samples value="4" />
+</forwardProjection>
+
+<backProjection>
+	<samples value="4" />
+</backProjection>
+
+<basisFunctions value="voxels" />
+<projectionIteration value="random" />
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+    <subVolumeCount value="1" />
+</hardware>
+
+<debug>
+	<outputKernelParameters value="false"/>
+	<writeProjections value="false"/>
+	<writeVirtualProjections value="false"/>
+	<writeResiduals value="false"/>
+	<writeIntermediateVolumes value="false"/>
+	<writeIntermediateVolumesAfterIterations value="false"/>
+	<IMODCompliantLogging value="false"/>
+</debug>

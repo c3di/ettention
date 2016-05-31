@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<algorithm value="sart" >
+	<numberOfIterations value="10" />
+	<useLongObjectCompensation value="false"/>
+	<lambda value="0.1" />
+</algorithm>
+
+<input>
+	<projections value="..\..\work\contour_shepp_logan\shepp_logan_missing" />
+	<skipProjections value="0-4,84-89" />
+</input>
+
+<output>
+	<filename value="..\..\work\contour_shepp_logan\shepp_logan_mask_reconstructed_mw_aad.mrc" />
+    <options>
+        <voxelType value="float32" />
+        <orientation value="xyz_order" />
+    </options>
+</output>
+
+<volume>
+	<dimension value="128 128 128"/>
+	<resolution value="128 128 128"/>
+    <initValue value="0.0" />
+</volume>
+
+<forwardProjection>
+	<samples value="1" />
+</forwardProjection>
+
+<backProjection>
+	<samples value="1" />
+</backProjection>
+
+<basisFunctions value="voxels" />
+<projectionIteration value="random" />
+
+<priorknowledge>
+    <maskVolumeFilename value="mask_antialiased_dilated.mrc" />
+</priorknowledge>
+
+<hardware>
+	<openclVendor value="nvidia"/>
+	<openclDeviceType value="gpu"/>
+    <subVolumeCount value="1" />
+</hardware>
+
+<debug>
+	<outputKernelParameters value="false"/>
+	<writeProjections value="false"/>
+	<writeVirtualProjections value="false"/>
+	<writeResiduals value="false"/>
+	<writeIntermediateVolumes value="false"/>
+	<writeIntermediateVolumesAfterIterations value="false"/>
+	<IMODCompliantLogging value="false"/>
+</debug>

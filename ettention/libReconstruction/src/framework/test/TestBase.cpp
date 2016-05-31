@@ -38,7 +38,6 @@ namespace ettention
         setUpCalled = true;
         const ::testing::TestInfo* const test_info = ::testing::UnitTest::GetInstance()->current_test_info();
         listener = new MemoryListener(test_info->test_case_name() + std::string(".") + test_info->name());
-        Logger::getInstance().setPrintPluginList(false);
         framework = new Framework(Logger::getInstance());
         Logger::getInstance().activateConsoleLog(Logger::FORMAT_SIMPLE);
         Logger::getInstance().setConsoleLogLevel(Logger::important);

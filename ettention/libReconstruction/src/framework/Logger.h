@@ -35,8 +35,6 @@ namespace ettention
         void deactivateFileLog();
         void setFileLogLevel(SeverityLevel level);
         void forceLogFlush();
-        void setPrintPluginList(bool printPluginList);
-        bool shouldPrintPluginList() const;
 
     private:
         typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > tSinkSyncOstream;
@@ -55,7 +53,6 @@ namespace ettention
         boost::shared_ptr<tSinkSyncOstream> fileLog;
         boost::shared_ptr< std::ostream > fileLogStream;
         std::string fileLogName;
-        bool printPluginList;
     };
 
     template< typename CharT, typename TraitsT >

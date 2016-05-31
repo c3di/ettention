@@ -117,8 +117,7 @@ namespace ettention
 
         plugins[plugin->getName()] = plugin;
 
-        if( Logger::getInstance().shouldPrintPluginList() )
-            LOGGER_IMP("loaded " << plugin->getName());
+        LOGGER_IMP("loaded " << plugin->getName());
 
         registerPlugin(plugin);
         autoLoadedPlugins.push_back(plugin);

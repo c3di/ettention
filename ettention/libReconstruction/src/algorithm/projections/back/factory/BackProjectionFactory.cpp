@@ -34,7 +34,9 @@ namespace ettention
             auto kernel = (*it)->CreateKernelInstance(framework, geometricSetup, volume, priorKnowledgeMask);
             if(kernel)
             {
+                Logger::getInstance().activateConsoleLog(Logger::FORMAT_SIMPLE);
                 LOGGER_IMP((boost::format("BackProjectionFactory chosen as responsible %1%.") % kernel->getKernelName()).str());
+                Logger::getInstance().deactivateConsoleLog();
                 return kernel;
             }
         }
