@@ -13,11 +13,11 @@
 </algorithm>
 
 <input>
-	<projections value="..\..\work\contour_shepp_logan\shepp_logan_projections" />
+	<projections value="..\..\work\masked_reconstruction\shepp_logan_projections" />
 </input>
 
 <output>
-	<filename value="..\..\work\contour_shepp_logan\shepp_logan_mask_reconstructed_aad.mrc" />
+	<filename value="..\..\work\masked_reconstruction\shepp_logan_mask_reconstructed_aad.mrc" />
 	<options>
 		<voxelType value="float32" />
 		<orientation value="xyz_order" />
@@ -46,17 +46,6 @@
 </backProjection>
 
 <debug>
-<!--
-	<outputKernelParameters value="false"/>
-	<writeProjections value="true"/>
-	<writeVirtualProjections value="true"/>
-	<writeResiduals value="false"/>
-	<writeRayLength value="true"/>
-	<writeIntermediateVolumes value="true"/>
-	<writeIntermediateVolumesAfterIterations value="true"/>
-	<logProgressInfo  value="true" />
-	<infoPath value="C:\Ettention\Git_build\bin\Debug\debug" />
--->
 	<outputKernelParameters value="false"/>
 	<writeProjections value="false"/>
 	<writeVirtualProjections value="false"/>

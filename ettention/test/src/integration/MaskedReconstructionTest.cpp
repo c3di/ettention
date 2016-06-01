@@ -263,12 +263,12 @@ TEST_F(MaskedReconstructionTest, BackProjectionKernelTest)
     delete kernel;
 }
 
-TEST_F(MaskedReconstructionTest, Contour_ChangeOnlyMaskedPartOfVolume)
+TEST_F(MaskedReconstructionTest, ChangeOnlyMaskedPartOfVolume)
 {
     ASSERT_EQ(checkIfOnlyMaskRegionWasUpdated("integration_test_mask_only.xml"), true);
 }
 
-TEST_F(MaskedReconstructionTest, DISABLED_Contour_IntegrationTest_Log) // Sviat: disabled on Jenkins till we fix skipping projections mechanism to not duplicate input stacks.
+TEST_F(MaskedReconstructionTest, DISABLED_DifferentConfigurationTest) // Sviat: disabled on Jenkins till refactor
 {
     std::string groundTruthPath = testdataDirectory + "shepp_logan.mrc";
 
@@ -306,7 +306,7 @@ TEST_F(MaskedReconstructionTest, DISABLED_Contour_IntegrationTest_Log) // Sviat:
     ASSERT_NEAR(0.0f, maskedRMS, 7e-2f);
 }
 
-TEST_F(MaskedReconstructionTest, DISABLED_Contour_WithMissingWegde_Log) // Sviat: disabled on Jenkins till we fix skipping projections mechanism to not duplicate input stacks.
+TEST_F(MaskedReconstructionTest, DISABLED_DifferentConfigurationWithMissingWedgeTest) // Sviat: disabled on Jenkins till we fix skipping projections mechanism to not duplicate input stacks.
 {
     std::string groundTruthPath = testdataDirectory + "shepp_logan.mrc";
 

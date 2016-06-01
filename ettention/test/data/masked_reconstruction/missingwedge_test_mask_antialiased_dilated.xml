@@ -7,12 +7,12 @@
 </algorithm>
 
 <input>
-	<projections value="..\..\work\contour_shepp_logan\shepp_logan_missing" />
+	<projections value="..\..\work\masked_reconstruction\shepp_logan_missing" />
 	<skipProjections value="0-4,84-89" />
 </input>
 
 <output>
-	<filename value="..\..\work\contour_shepp_logan\shepp_logan_mask_reconstructed_mw_aad.mrc" />
+	<filename value="..\..\work\masked_reconstruction\shepp_logan_mask_reconstructed_mw_aad.mrc" />
     <options>
         <voxelType value="float32" />
         <orientation value="xyz_order" />
